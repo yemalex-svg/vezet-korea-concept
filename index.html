@@ -806,7 +806,7 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
 <!-- ======== HERO: scroll video ======== -->
 <section class="story" id="top">
   <div class="stage">
-    <video id="v" data-d="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/2fe10017-8bb9-4bd8-89d1-d936a05bbab1.mp4" data-m="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/0f1a91c1-46c3-4c3c-98b8-2c13cfb88fbe.mp4" muted playsinline preload="auto"></video>
+    <video id="v" data-d="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/2fe10017-8bb9-4bd8-89d1-d936a05bbab1.mp4" data-m="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/0f1a91c1-46c3-4c3c-98b8-2c13cfb88fbe.mp4" data-pm="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/e833856c-d40d-4aac-8821-0d31b9fcb46e.jpg" data-pd="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/c8f923a2-bb94-4d04-adf6-442c1cca5c1f.jpg" muted playsinline webkit-playsinline preload="auto"></video>
     <div class="shade"></div>
     <div id="chs"></div>
     <div class="hw" id="hw" data-p="calc">
@@ -1061,13 +1061,42 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-focus-trac
 
 const hw=$('#hw'), routeEl=$('.route');
 const v=$('#v'), story=$('.story'), rl=$('#rl'), rd=$('#rd'), hint=$('#hint'), loading=$('#loading');
-let ready=false,cur=0,intro=0,t0=performance.now();
-function onReady(){if(ready)return;ready=true;try{v.pause()}catch(e){};loading.style.display='none';}
-v.addEventListener('loadeddata',onReady);v.addEventListener('canplay',onReady);
+let ready=false,primed=false,cur=0,intro=0,t0=performance.now();
 /* вертикальная версия — для узких портретных экранов (телефоны); планшеты и компьютеры получают 16:9 */
-v.src=matchMedia('(max-aspect-ratio: 13/20)').matches?v.dataset.m:v.dataset.d;
-if(v.readyState>=2)onReady();else v.load();
-window.addEventListener('touchstart',function u(){v.play().then(()=>v.pause()).catch(()=>{});window.removeEventListener('touchstart',u)},{passive:true});
+const MOB=matchMedia('(max-aspect-ratio: 13/20)').matches, SRC=MOB?v.dataset.m:v.dataset.d;
+/* iPhone/iPad и телефоны: ролик скачиваем целиком и отдаём видео из памяти — иначе Safari не грузит кадры
+   до первого запуска и перемотка по сети дёргается */
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+v.poster=MOB?v.dataset.pm:v.dataset.pd;
+v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('webkit-playsinline','');
+function onReady(){if(ready||v.readyState<2)return;ready=true;loading.style.display='none';}
+['loadeddata','canplay','seeked'].forEach(e=>v.addEventListener(e,onReady));
+/* Safari показывает кадры при перемотке только после первого запуска: запускаем и сразу ставим на паузу.
+   В режиме энергосбережения запуск разрешён только по касанию — тогда ждём касания */
+function prime(){
+  if(primed||!v.currentSrc)return;
+  const p=v.play();
+  if(!p||!p.then){primed=true;return;}
+  p.then(()=>{primed=true;v.pause();onReady();}).catch(()=>{if(!ready)loading.textContent='Коснитесь экрана, чтобы включить видео';});
+}
+v.addEventListener('loadedmetadata',prime);
+['touchend','click','keydown'].forEach(e=>window.addEventListener(e,prime,{passive:true}));
+function direct(){v.src=SRC;v.load();}
+if((MOB||IOS)&&window.fetch&&window.URL&&window.Blob){
+  fetch(SRC).then(r=>{
+    if(!r.ok)throw new Error(r.status);
+    const total=+r.headers.get('content-length')||0;
+    if(!r.body||!r.body.getReader||!total)return r.blob();
+    const reader=r.body.getReader(),chunks=[];let got=0;
+    const pump=()=>reader.read().then(({done,value})=>{
+      if(done)return new Blob(chunks,{type:'video/mp4'});
+      chunks.push(value);got+=value.length;
+      loading.textContent='Загружаю видео… '+Math.min(99,Math.round(got/total*100))+'%';
+      return pump();
+    });
+    return pump();
+  }).then(b=>{v.src=URL.createObjectURL(b);v.load();}).catch(direct);
+}else direct();
 
 function storyP(){const r=story.getBoundingClientRect();return clamp(-r.top/(r.height-innerHeight),0,1);}
 function mapT(u){const i=Math.min(Math.floor(u),NSEG-1);return ANCH[i]+(ANCH[i+1]-ANCH[i])*(u-i);}
@@ -1076,7 +1105,7 @@ function render(){
   const target=storyP()*NSEG;
   cur+=(target-cur)*0.14; if(Math.abs(target-cur)<0.0005)cur=target;
   const t=mapT(cur);
-  if(inView&&ready&&!v.seeking&&Math.abs(v.currentTime-t)>0.02){try{v.currentTime=t}catch(e){}}
+  if(inView&&v.readyState>=1&&!v.seeking&&Math.abs(v.currentTime-t)>0.02){try{v.currentTime=t}catch(e){}}
   intro=clamp((performance.now()-t0)/1400,0,1);
   CH.forEach((c,i)=>{
     let o,f;
