@@ -1,4 +1,4 @@
-/* 3D-Ð¼Ð¾Ð´ÐµÐ»Ð¸ Ð´Ð»Ñ ÑÑ†ÐµÐ½Ñ‹ Â«Ð”Ð¾ÑÑ‚Ð°Ð²ÐºÐ°Â»: Ð‘Ð¾Ð½Ð³Ð¾, ÑÐ°Ð¼Ð¾Ð»Ñ‘Ñ‚, ÐºÐ¾Ð½Ñ‚ÐµÐ¹Ð½ÐµÑ€Ð¾Ð²Ð¾Ð·. Int16 Ð¿Ð¾Ð·Ð¸Ñ†Ð¸Ð¸ + Uint16 Ð¸Ð½Ð´ÐµÐºÑÑ‹ Ð² base64. Tripo H3.1 Ð¿Ð¾ ÐºÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ°Ð¼, ÑƒÐ¿Ñ€Ð¾Ñ‰ÐµÐ½Ð¾ meshoptimizer */
+/* 3D models for the code scene: Bongo truck, cargo plane, container ship. Int16 positions + Uint16 indices, base64. Tripo H3.1, simplified with meshoptimizer */
 window.__MOD={
 bongo:["2BAAADNpAADU+f8+AHBFuAB4PjkAAAAAo1vAB2Y+xlxhB+8+p1tgDpU9a10sBEY+nF9aB0A+tGElB0o8TmBCAzE9R170DlQ9jlsgBNU91VuBAv48x19jAuM8",
 "518oDlA8eF3LD6M8iF4KEDU7nFupDy48K2KAAjE6HWFGD8g0MmS7Ac4zN19JAWUz9WOBBkA2Dl9QD7UzxGE9DpE2UF4KECM2m2A0AbEzomOiBq00g2SqBbMy",
