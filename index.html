@@ -797,7 +797,7 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <button aria-label="Найти"><svg width="16" height="12" viewBox="0 0 16 12"><path d="M1 6h13M9 1l5 5-5 5" fill="none" stroke="#fff" stroke-width="1.3"/></svg></button>
       <div class="pop" id="pop"></div>
     </form>
-    <a class="btn o" href="#top" data-calc>Рассчитать доставку</a>
+    <a class="btn o" href="tarify.html#calc">Рассчитать доставку</a>
     <a class="btn w" href="kabinet.html" data-page="Личный кабинет">Личный кабинет</a>
     <button class="burger" id="burger" aria-label="Меню"><span></span></button>
   </div>
@@ -847,7 +847,7 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <div class="tabs pt" id="pTabs"><button class="tab on" data-g="p">Частным лицам</button><button class="tab" data-g="b">Бизнесу</button></div>
     </div>
     <div class="pg on" data-g="p">
-      <article class="pc rv"><div class="pc-t"><h3>Своя посылка</h3><p>Отправьте вещи и подарки домой. Сдайте коробку в пункт приёма 24/7 или вызовите курьера.</p><a class="btn ol" href="#top" data-calc>Рассчитать</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/17128196-96b7-4a27-b9da-39e6bab91326.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Своя посылка</h3><p>Отправьте вещи и подарки домой. Сдайте коробку в пункт приёма 24/7 или вызовите курьера.</p><a class="btn ol" href="tarify.html#calc">Рассчитать</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/17128196-96b7-4a27-b9da-39e6bab91326.jpg"></article>
       <article class="pc rv"><div class="pc-t"><h3>Выкуп товаров</h3><p>Купим на Coupang, Gmarket и Olive Young по вашей ссылке, проверим и пришлём фото.</p><a class="btn ol" href="vykup.html" data-page="Выкуп товаров">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/9cabff09-6f44-4886-9341-7d90eecd9af4.jpg"></article>
       <article class="pc rv"><div class="pc-t"><h3>Объединение заказов</h3><p>Соберём покупки из разных магазинов в одну коробку и отправим как одну посылку.</p><a class="btn ol" href="kak-otpravit.html" data-page="Как отправить посылку">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/3ddcf56e-9dd1-4896-8c6e-b065f28e7ce4.jpg"></article>
       <article class="pc rv"><div class="pc-t"><h3>Доставка до двери</h3><p>Курьер привезёт посылку домой. Или заберите её в пункте выдачи в Алматы и Ростове-на-Дону.</p><a class="btn ol" href="punkty.html" data-page="Пункты приёма и выдачи">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/f7c28d55-7a31-4c63-9563-a9cbe3527b90.jpg"></article>
@@ -1001,7 +1001,7 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
   <div class="edge top"><div class="f"></div><svg><use href="#stL"/></svg><div class="gap"></div><svg><use href="#stR"/></svg><div class="f"></div></div>
   <div class="cta rv">
     <h2 class="slogan" aria-label="Везёт! Везём!"><span class="nw">Вез<span class="yo">е</span>т!</span> <span class="nw">Вез<span class="yo">е</span>м!</span></h2>
-    <a class="btn o lg" href="#top" data-calc>Рассчитать доставку</a>
+    <a class="btn o lg" href="tarify.html#calc">Рассчитать доставку</a>
   </div>
   <div class="ftr">
     <div class="wrap">
@@ -1051,8 +1051,8 @@ CH.forEach((c,i)=>{
   if(c.lab) html+='<div class="lab mono">'+c.lab+'</div>';
   if(c.h) html+=(c.hero?'<h1 class="hh">':'<h2 class="hh">')+c.h+(c.hero?'</h1>':'</h2>');
   if(c.p) html+='<p>'+c.p+'</p>';
-  if(c.cta===1) html+='<div class="cta"><a class="btn o lg" href="#top" data-calc>Рассчитать доставку</a><a class="btn w lg" href="#" data-focus-track>Отследить посылку</a></div>';
-  if(c.cta===2) html+='<div class="cta"><a class="btn o lg" href="#top" data-calc>Рассчитать доставку</a></div>';
+  if(c.cta===1) html+='<div class="cta"><a class="btn o lg" href="tarify.html#calc">Рассчитать доставку</a><a class="btn w lg" href="#" data-focus-track>Отследить посылку</a></div>';
+  if(c.cta===2) html+='<div class="cta"><a class="btn o lg" href="tarify.html#calc">Рассчитать доставку</a></div>';
   if(c.foot) html+='<div class="foot mono">'+c.foot+'</div>';
   d.innerHTML=html;box.appendChild(d);
   c.el=d;c.words=c.h?split(d.querySelector('.hh')):[];
@@ -1151,7 +1151,7 @@ function cost(code,t,w){
 }
 
 /* ---------- links to inner pages: страницы собраны (29.10), ссылки ведут на файлы рядом ---------- */
-document.addEventListener('click',e=>{const a=e.target.closest('[data-calc]');if(!a)return;e.preventDefault();$('#nav').classList.remove('open');const tb=$('.hw-tab[data-p="calc"]');if(tb)tb.click();scrollTo({top:0,behavior:'smooth'});setTimeout(()=>$('#hwCountry').focus({preventScroll:true}),900);});
+/* кнопки «Рассчитать доставку» ведут на страницу тарифов с калькулятором (tarify.html#calc) */
 
 /* ---------- nav dropdowns ---------- */
 $$('.dd-b').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const d=b.parentElement,on=!d.classList.contains('open');$$('.dd').forEach(x=>x.classList.remove('open'));d.classList.toggle('open',on);}));
