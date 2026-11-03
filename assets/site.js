@@ -25,7 +25,7 @@ document.addEventListener('click',e=>{const a=e.target.closest('[data-calc]');if
 const pop=$('#pop');
 function trackHTML(k){const d=V.DEMO[k];
   return d?'<b>'+V.STG[d.st]+'</b><div class="bar">'+V.STG.map((s,i)=>'<span class="'+(i<=d.st?'on':'')+'"></span>').join('')+'</div><small>'+k+' · '+d.t+' · '+d.w+'. День '+d.day+' из '+d.tot+'. Получение: '+d.city+'.</small>'
-          :'<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте VK-20481.</small>';}
+          :'<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте '+V.DEMO_NO+'.</small>';}
 $('#trackForm').addEventListener('submit',e=>{e.preventDefault();const k=$('#trackIn').value.trim().toUpperCase().replace(/\s/g,'');pop.innerHTML=trackHTML(k);pop.classList.add('on');});
 document.addEventListener('click',e=>{if(!e.target.closest('#trackForm'))pop.classList.remove('on');});
 
@@ -76,7 +76,7 @@ function initCalc(root,opt){
   const q=s=>root.querySelector(s);
   const cCountry=q('.cCountry'), cW=q('.cW'), cTabs=q('.cTabs'), cCat=q('.cCat'), catFld=q('.catFld'), cCity=q('.cCity');
   if(opt.lock) cCountry.closest('.fld').classList.add('lockc');
-  cCat.innerHTML=V.CATS.map((x,i)=>'<option value="'+i+'">'+x[0]+' · '+V.usdS(x[1])+' за кг</option>').join('');
+  cCat.innerHTML=V.CATS.map((x,i)=>'<option value="'+i+'">'+x[0]+' · '+V.usdS(x[1])+' за кг'+(x[2]?', '+x[2]:'')+'</option>').join('');
   const T=()=>V.C[cc].t.find(x=>x.k===tk)||V.C[cc].t[0];
   const lim=()=>V.C[cc].lim||[0.5,30];
   function drawTabs(){
@@ -86,19 +86,22 @@ function initCalc(root,opt){
     const L=lim(); cW.min=L[0]; cW.max=L[1]; if(+cW.value<L[0]) cW.value=L[0];
     q('.tkMin').textContent=V.fmtKg(L[0]);
   }
+  /* итог = доставка + упаковка отдельной строкой (ТЗ 02.11, раздел 7.5) */
+  function total(t,w){const m=V.cost(cc,t,w,cat); if(!m) return null; const p=V.pack(w); return {m,p,v:m.v+(p?p.krw:0)};}
   function bars(w){const c=V.C[cc]; if(c.t.length<2) return '';
-    const vs=c.t.map(t=>{const m=V.cost(cc,t,w,cat); return {t,m,v:m?+m.main.replace(/[^\d]/g,''):null};}), mx=Math.max(1,...vs.map(x=>x.v||0));
-    return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.t.k===tk?' on':'')+(x.v==null?' na':'')+'" data-t="'+x.t.k+'" title="'+x.t.name+' · '+V.days(x.t)+'"><span class="hb-v">'+(x.m?x.m.main:'по запросу')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.t.name+'</span></button>').join('')+'</div>';}
+    const vs=c.t.map(t=>{const r=total(t,w); return {t,r,v:r?r.v:null};}), mx=Math.max(1,...vs.map(x=>x.v||0));
+    return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.t.k===tk?' on':'')+(x.v==null?' na':'')+'" data-t="'+x.t.k+'" title="'+x.t.name+' · '+V.days(x.t)+'"><span class="hb-v">'+(x.r?'от '+V.fmt(x.v)+' ₩':'менеджер')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.t.name+'</span></button>').join('')+'</div>';}
   function calc(animate){
     const c=V.C[cc], t=T(), w=parseFloat(cW.value), L=lim();
     q('.wOut').textContent=V.fmtKg(w);
     cW.style.setProperty('--p',((w-L[0])/(L[1]-L[0])*100)+'%');
     q('.rTtl').innerHTML=(t.title||t.name+' в '+c.n)+' <em>Посылка '+V.fmtKg(w)+' обойдётся в</em>';
-    const m=V.cost(cc,t,w,cat), sum=q('.rSum');
-    if(m){const s=(m.ap?'≈ ':'')+m.main; if(animate) roll(sum,s); else {sum.classList.remove('odo');sum.textContent=s;}
-      q('.rMeta').innerHTML='<span>Срок: <b>'+V.days(t)+'</b></span><span>'+m.sub+'</span>'+(t.cat?'<span>Категория: <b>'+V.CATS[cat][0]+'</b>, '+V.usdS(V.CATS[cat][1])+' за кг</span>':'');}
-    else{sum.classList.remove('odo');sum.textContent='Цену назовём';
-      q('.rMeta').innerHTML='<span>Срок: <b>'+V.days(t)+'</b></span><span>Цену этого тарифа для '+c.g+' назовёт менеджер.</span>';}
+    const r=total(t,w), sum=q('.rSum');
+    if(r){const s='от '+V.fmt(r.v)+' ₩'; if(animate) roll(sum,s); else {sum.classList.remove('odo');sum.textContent=s;}
+      q('.rMeta').innerHTML='<span>Доставка: <b>'+r.m.main+'</b></span>'+(r.p?'<span>Упаковка «'+r.p.name+'»: <b>'+V.fmt(r.p.krw)+' ₩</b></span>':'')+'<span>Срок: <b>'+V.days(t)+'</b></span><span>'+r.m.sub+'</span>'+(t.cat?'<span>Категория: <b>'+V.CATS[cat][0]+'</b>, '+V.usdS(V.CATS[cat][1])+' за кг</span>':'');}
+    else{sum.classList.remove('odo');sum.textContent='Рассчитает менеджер';
+      const why=t.min&&w<t.min?'Тариф «'+t.name+'» — от '+V.fmtKg(t.min)+'. ':t.max&&w>t.max?'Тариф «'+t.name+'» — до '+V.fmtKg(t.max)+'. ':'';
+      q('.rMeta').innerHTML='<span>Срок: <b>'+V.days(t)+'</b></span><span>'+why+'Сумму до вашего города назовёт менеджер: <a href="'+V.BOT+'" target="_blank" rel="noopener">написать в Telegram</a>.</span>';}
     q('.rNote').textContent=c.note||'';
     const b=bars(w); q('.rAllT').textContent=b?'Все тарифы для '+V.fmtKg(w)+':':''; q('.rBars').innerHTML=b;
   }
