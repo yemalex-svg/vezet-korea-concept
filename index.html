@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Geist+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#0B0B0C; --navy2:#26262A; --deep:#050506; --cream:#FFFFFF;
+  --navy:#111E46; --navy2:#2A3766; --deep:#0A1230; --cream:#FFFFFF; --milk:#F5F4EE;   /* фирменные цвета (ТЗ 02.11, раздел 5) */
   --card:#F3F3F4; --card2:#E6E6E8; --line:#DDDDE0;
   --muted:#55555B; --ink2:#55555B; --ink3:#8C8C93; --grey:#B4B4BA; --blue:#5274FF; --orange:#F96C19;
   --sans:'Onest',system-ui,-apple-system,sans-serif;
@@ -181,7 +181,7 @@ button,input,select{font:inherit;color:inherit}
 
 @media (max-width:760px) and (max-height:739px){.ch.c0 p{display:none}}
 
-/* ---------- products (CDEK-style) ---------- */
+/* ---------- products ---------- */
 .ph{display:flex;flex-direction:column;gap:30px}
 .h2.left{text-align:left;margin:0;max-width:none}
 .pt .tab{height:48px;padding:0 24px;font-size:16px}
@@ -311,7 +311,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .step p{font-size:clamp(24px,2.35vw,35px);line-height:1.18;letter-spacing:-.035em;margin:0;font-weight:400}
 .step p .wd,.step p .wd.lit,.step p .wd.e1,.step p .wd.e2{opacity:1;color:var(--navy)}
 .step .mob{display:none}
-.media{position:sticky;top:104px;height:calc(100vh - 140px);border-radius:16px;overflow:hidden;background:#0B0B0C}
+.media{position:sticky;top:104px;height:calc(100vh - 140px);border-radius:16px;overflow:hidden;background:var(--navy)}
 .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);transition:opacity .7s ease,transform 7s linear}
 .media img.on{opacity:1;transform:scale(1.1)}
 .media:before{content:'';position:absolute;left:-1px;top:30%;height:40%;width:30px;background:var(--cream);z-index:3;clip-path:polygon(0 0,100% 30px,100% calc(100% - 30px),0 100%)}
@@ -491,8 +491,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .cx-p{position:relative;flex:1 1 0;min-width:0;border-radius:20px;overflow:hidden;background:var(--card);cursor:pointer;transition:flex-grow .6s cubic-bezier(.2,.7,.2,1),background .3s}
 .cx-p:hover{background:var(--card2)}
 .cx-p.on{flex-grow:4.4;cursor:default}
-.cx-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .5s ease,transform 1.4s ease}
-.cx-p.on img{opacity:1;transform:none}
+.cx-p > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .5s ease,transform 1.4s ease}
+.cx-p.on > img{opacity:1;transform:none}
+.cx-f{display:block;width:32px;height:24px;border-radius:4px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.flag{display:inline-block;width:20px;height:15px;border-radius:3px;margin-right:9px;vertical-align:-1px;object-fit:cover;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
 .cx-p:after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88),rgba(0,0,0,.2) 58%,rgba(0,0,0,0));opacity:0;transition:opacity .5s}
 .cx-p.on:after{opacity:1}
 .cx-in{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:28px 28px 30px}
@@ -523,6 +525,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .ctc-ch{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
 .ctc .chip{color:#fff;border-color:rgba(255,255,255,.55)}
 .ctc .chip:hover{background:#fff;color:var(--navy)}
+.ctc-hrs{margin:18px 0 0;max-width:420px;font-size:var(--fs-small);line-height:var(--lh-small);color:rgba(255,255,255,.7)}
 .ctc .fcard{background:none;box-shadow:none;border-radius:0;padding:0}
 @media (max-width:900px){.ctc{grid-template-columns:1fr;gap:36px;padding:56px 22px 28px}}
 
@@ -538,9 +541,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .btn.w,.fcard .send{--dot:var(--navy)}
 @keyframes dotJump{0%,100%{transform:translateY(0) scale(1.35,.65)}12%{transform:translateY(-3px) scale(.8,1.2)}50%{transform:translateY(-11px) scale(1,1)}88%{transform:translateY(-3px) scale(.8,1.2)}}
 
-.odo{display:inline-flex;align-items:flex-end}
+.odo{display:inline-flex;align-items:flex-end;font-variant-numeric:tabular-nums}
 .odo-d{display:inline-block;height:1em;overflow:hidden;line-height:1}
-.odo-d i{display:block;height:1em;line-height:1;font-style:normal;white-space:pre}
+.odo-d i{display:block;height:1em;line-height:1;font-style:normal;white-space:pre;text-align:center}
 .odo-s{display:block}
 .hw-res b.odo{line-height:1}
 
@@ -555,12 +558,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .hb.on .hb-b{background:var(--orange)}
 .hb.na .hb-b{background:none;box-shadow:inset 0 0 0 1.5px var(--line)}
 .hb-n{font-size:var(--fs-cap);line-height:1.3;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb-v,.hb-n{max-width:100%}
 @keyframes hbUp{from{transform:scaleY(0)}to{transform:none}}
 @media (max-width:760px) and (max-height:760px){.hw-bars{display:none}}
+@media (max-width:600px){.hw-res .hw-bars{display:none}}
 @media (prefers-reduced-motion:reduce){.hb-b,.btn .dots i{animation:none}}
 
 /* ---------- PROMISE over video ---------- */
-.promise{position:relative;min-height:88vh;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;background:#050506}
+.promise{position:relative;min-height:88vh;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;background:var(--deep)}
 .promise video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .promise .ov{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,.5),rgba(0,0,0,.72))}
 .promise .in{position:relative;z-index:2;padding:120px 24px}
@@ -617,7 +622,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .final .cta{position:relative;z-index:1;text-align:center;padding:210px 20px 170px}
 .final .pl{z-index:0}
 .slogan{font-weight:500;font-size:clamp(64px,10.5vw,170px);line-height:.9;letter-spacing:-.05em;margin:0}
-.yo{position:relative;display:inline-block}
+.yo{position:relative;display:inline-block;color:transparent;background:linear-gradient(transparent 0 var(--yo-cut,24%),#fff var(--yo-cut,24%));-webkit-background-clip:text;background-clip:text}
 .nw{white-space:nowrap}
 .yo:before,.yo:after{content:'';position:absolute;top:.045em;width:.115em;height:.115em;border-radius:50%}
 .yo:before{left:.05em;background:var(--blue)}
@@ -764,11 +769,11 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
   <nav class="links">
     <div class="dd"><button type="button" class="dd-b">Доставка<i></i></button>
       <div class="dd-p">
-        <a class="dl" href="rossiya.html" data-page="Доставка в Россию"><b>Россия</b><span>Самолёт от 7 дней, доступный тариф $5 за кг</span></a>
-        <a class="dl" href="kazakhstan.html" data-page="Доставка в Казахстан"><b>Казахстан</b><span>Самолёт от 3 дней, контейнер до Алматы</span></a>
-        <a class="dl" href="kyrgyzstan.html" data-page="Доставка в Кыргызстан"><b>Кыргызстан</b><span>Контейнер $2,7 за кг, 10–14 дней</span></a>
-        <a class="dl" href="belarus.html" data-page="Доставка в Беларусь"><b>Беларусь</b><span>От 10 дней, цену назовёт менеджер</span></a>
-        <a class="dl" href="uzbekistan.html" data-page="Доставка в Узбекистан"><b>Узбекистан</b><span>12 000 ₩ за кг, 5–7 дней</span></a>
+        <a class="dl" href="rossiya.html" data-page="Доставка в Россию"><b><img class="flag" src="assets/flag-ru.svg" alt="" width="20" height="15">Россия</b><span>Авиа от 7 дней, контейнер от $6 за кг</span></a>
+        <a class="dl" href="kazakhstan.html" data-page="Доставка в Казахстан"><b><img class="flag" src="assets/flag-kz.svg" alt="" width="20" height="15">Казахстан</b><span>Авиа за 3 дня, контейнер от $3 за кг</span></a>
+        <a class="dl" href="kyrgyzstan.html" data-page="Доставка в Кыргызстан"><b><img class="flag" src="assets/flag-kg.svg" alt="" width="20" height="15">Кыргызстан</b><span>Авиа $11 за кг, контейнер от $3 за кг</span></a>
+        <a class="dl" href="belarus.html" data-page="Доставка в Беларусь"><b><img class="flag" src="assets/flag-by.svg" alt="" width="20" height="15">Беларусь</b><span>Экспресс и контейнер до вашего города</span></a>
+        <a class="dl" href="uzbekistan.html" data-page="Доставка в Узбекистан"><b><img class="flag" src="assets/flag-uz.svg" alt="" width="20" height="15">Узбекистан</b><span>Авиа 12 000 ₩ за кг, 5 дней</span></a>
         <a class="dl all" href="tarify.html" data-page="Тарифы и калькулятор"><b>Все тарифы и калькулятор</b></a>
       </div></div>
     <div class="dd"><button type="button" class="dd-b">Услуги<i></i></button>
@@ -779,16 +784,15 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
     <div class="dd"><button type="button" class="dd-b">Помощь<i></i></button>
       <div class="dd-p">
         <a class="dl" href="tarify.html" data-page="Тарифы и калькулятор"><b>Тарифы и калькулятор</b><span>Все страны и тарифы в одной таблице</span></a>
-        <a class="dl" href="kak-otpravit.html" data-page="Как отправить посылку"><b>Как отправить посылку</b><span>Упаковка, опись и что нельзя отправлять</span></a>
-        <a class="dl" href="punkty.html" data-page="Пункты приёма и выдачи"><b>Пункты приёма и выдачи</b><span>Инчхон и Ансан 24/7, Алматы, Ростов-на-Дону</span></a>
+        <a class="dl" href="kak-otpravit.html" data-page="Как отправить посылку"><b>Как отправить посылку</b><span>Пункты приёма, упаковка и оплата</span></a>
+        <a class="dl" href="punkty.html" data-page="Пункты приёма"><b>Пункты приёма</b><span>Инчхон круглосуточно, Ансан, Хонсон, Кимхэ</span></a>
         <a class="dl" href="otslezhivanie.html" data-page="Отслеживание"><b>Отслеживание</b><span>Статус посылки по номеру</span></a>
         <a class="dl" href="voprosy.html" data-page="Вопросы и ответы"><b>Вопросы и ответы</b><span>Отправка, выкуп, оплата, сроки</span></a>
       </div></div>
     <div class="dd"><button type="button" class="dd-b">Компания<i></i></button>
       <div class="dd-p">
-        <a class="dl" href="o-kompanii.html" data-page="О компании"><b>О компании</b><span>Команда, склад и отзывы</span></a>
-        <a class="dl" href="kontakty.html" data-page="Контакты"><b>Контакты</b><span>Telegram, почта, телефон</span></a>
-        <a class="dl ml" href="kabinet.html" data-page="Личный кабинет"><b>Личный кабинет</b></a>
+        <a class="dl" href="o-kompanii.html" data-page="О компании"><b>О компании</b><span>Кто мы и как работаем</span></a>
+        <a class="dl" href="kontakty.html" data-page="Контакты"><b>Контакты</b><span>Telegram-бот и Instagram</span></a>
       </div></div>
   </nav>
   <div class="right">
@@ -798,12 +802,10 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <div class="pop" id="pop"></div>
     </form>
     <a class="btn o" href="tarify.html#calc">Рассчитать доставку</a>
-    <a class="btn w" href="kabinet.html" data-page="Личный кабинет">Личный кабинет</a>
     <button class="burger" id="burger" aria-label="Меню"><span></span></button>
   </div>
 </header>
 
-<!-- ======== HERO: scroll video ======== -->
 <section class="story" id="top">
   <div class="stage">
     <video id="v" data-d="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/2fe10017-8bb9-4bd8-89d1-d936a05bbab1.mp4" data-m="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/0f1a91c1-46c3-4c3c-98b8-2c13cfb88fbe.mp4" data-pm="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/e833856c-d40d-4aac-8821-0d31b9fcb46e.jpg" data-pd="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/c8f923a2-bb94-4d04-adf6-442c1cca5c1f.jpg" muted playsinline webkit-playsinline preload="auto"></video>
@@ -818,12 +820,12 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
           <div class="hw-f"><input id="hwW" inputmode="decimal" placeholder="Вес посылки, кг" aria-label="Вес посылки, кг">
             <div class="hw-q"><a data-w="1">1 кг</a><a data-w="5">5 кг</a><a data-w="10">10 кг</a><a data-w="20">20 кг</a></div></div>
           <div class="hw-f"><select id="hwT" aria-label="Тариф"></select>
-            <div class="hw-q hw-note" id="hwNote">Самолёт, экспресс или контейнер</div></div>
+            <div class="hw-q hw-note" id="hwNote">Авиа, экспресс или контейнер</div></div>
           <button class="btn o hw-go">Рассчитать</button>
           <div class="hw-res" id="hwRes" aria-live="polite"></div>
         </form>
         <form class="hw-pane" data-p="track" id="hwTrack" autocomplete="off" novalidate>
-          <div class="hw-f"><input id="hwCode" placeholder="Номер посылки, например VK-20481" aria-label="Номер посылки">
+          <div class="hw-f"><input id="hwCode" placeholder="Номер посылки, например RU-KVA-1365-01-47" aria-label="Номер посылки">
             <div class="hw-q"><a id="hwWhere">Где найти номер посылки?</a></div></div>
           <button class="btn o hw-go">Отследить</button>
           <div class="hw-res" id="hwTRes" aria-live="polite"></div>
@@ -836,10 +838,8 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
   </div>
 </section>
 
-<!-- ======== transition: hero → content (Terminal-style tab) ======== -->
 <div class="h-edge" aria-hidden="true"><div class="edge bot"><div class="f"></div><svg><use href="#shL"/></svg><div class="gap"></div><svg><use href="#shR"/></svg><div class="f"></div></div></div>
 
-<!-- ======== PRODUCTS (CDEK-style) ======== -->
 <section class="sec" id="what">
   <div class="wrap">
     <div class="ph rv">
@@ -847,77 +847,58 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <div class="tabs pt" id="pTabs"><button class="tab on" data-g="p">Частным лицам</button><button class="tab" data-g="b">Бизнесу</button></div>
     </div>
     <div class="pg on" data-g="p">
-      <article class="pc rv"><div class="pc-t"><h3>Своя посылка</h3><p>Отправьте вещи и подарки домой. Сдайте коробку в пункт приёма 24/7 или вызовите курьера.</p><a class="btn ol" href="tarify.html#calc">Рассчитать</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/17128196-96b7-4a27-b9da-39e6bab91326.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Выкуп товаров</h3><p>Купим на Coupang, Gmarket и Olive Young по вашей ссылке, проверим и пришлём фото.</p><a class="btn ol" href="vykup.html" data-page="Выкуп товаров">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/9cabff09-6f44-4886-9341-7d90eecd9af4.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Объединение заказов</h3><p>Соберём покупки из разных магазинов в одну коробку и отправим как одну посылку.</p><a class="btn ol" href="kak-otpravit.html" data-page="Как отправить посылку">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/3ddcf56e-9dd1-4896-8c6e-b065f28e7ce4.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Доставка до двери</h3><p>Курьер привезёт посылку домой. Или заберите её в пункте выдачи в Алматы и Ростове-на-Дону.</p><a class="btn ol" href="punkty.html" data-page="Пункты приёма и выдачи">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/f7c28d55-7a31-4c63-9563-a9cbe3527b90.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Своя посылка</h3><p>Отправьте вещи и подарки домой. Сдайте коробку в пункт приёма, упакуем её сами.</p><a class="btn ol" href="tarify.html#calc">Рассчитать</a></div><img loading="lazy" alt="Стеллажи с посылками на складе" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/17128196-96b7-4a27-b9da-39e6bab91326.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Выкуп товаров</h3><p>Купим на Coupang, Gmarket и Olive Young по вашей ссылке. Иностранная карта не нужна.</p><a class="btn ol" href="vykup.html" data-page="Выкуп товаров">Подробнее</a></div><img loading="lazy" alt="Склад с полками для товаров" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/9cabff09-6f44-4886-9341-7d90eecd9af4.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Пункты приёма</h3><p>Четыре пункта в Корее: Инчхон круглосуточно, Ансан, Хонсон и Кимхэ.</p><a class="btn ol" href="punkty.html" data-page="Пункты приёма">Адреса</a></div><img loading="lazy" alt="Пункт приёма посылок в Корее" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/49924f0e-ada4-4c79-9580-e44ed7776034.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Отслеживание</h3><p>Номер посылки придёт в сообщении менеджера. По нему видно, где посылка сейчас.</p><a class="btn ol" href="otslezhivanie.html" data-page="Отслеживание">Подробнее</a></div><img loading="lazy" alt="Фургон с посылками в пути" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/f7c28d55-7a31-4c63-9563-a9cbe3527b90.jpg"></article>
     </div>
     <div class="pg" data-g="b">
-      <article class="pc rv"><div class="pc-t"><h3>Коммерческий груз</h3><p>Косметика, БАДы и автозапчасти партиями. Цена за килограмм зависит от категории.</p><a class="btn ol" href="biznes.html" data-page="Бизнесу">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/d98bd580-20a3-43f8-a279-be52442aa30c.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Автозапчасти во Владивосток</h3><p>Отдельный тариф: около 14 дней от склада в Корее, $5 за кг.</p><a class="btn ol" href="rossiya.html" data-page="Доставка в Россию">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/23cfe29b-22ed-43e5-b663-9bcba1380145.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Крупные поставки</h3><p>Для поставок больше 5 тонн в Казахстан особые условия. Обсудим с менеджером.</p><a class="btn ol" href="#contact">Обсудить</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/a5e13252-68f4-4ba4-b787-af49f25f6166.jpg"></article>
-      <article class="pc rv"><div class="pc-t"><h3>Электроника поштучно</h3><p>Телефоны, наушники, планшеты и смарт-часы в Узбекистан по цене за штуку.</p><a class="btn ol" href="uzbekistan.html" data-page="Доставка в Узбекистан">Подробнее</a></div><img loading="lazy" alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/416c0180-1109-4881-b5e3-bdc41c652c56.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Коммерческий груз</h3><p>Косметика, БАДы и автозапчасти партиями. Цена за килограмм зависит от категории.</p><a class="btn ol" href="biznes.html" data-page="Бизнесу">Подробнее</a></div><img loading="lazy" alt="Порт с контейнерами" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/d98bd580-20a3-43f8-a279-be52442aa30c.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Автозапчасти до Владивостока</h3><p>Паромом, около 14 дней, от $5 за кг. Сумму рассчитает менеджер.</p><a class="btn ol" href="rossiya.html" data-page="Доставка в Россию">Подробнее</a></div><img loading="lazy" alt="Контейнерный терминал" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/23cfe29b-22ed-43e5-b663-9bcba1380145.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Регулярные поставки</h3><p>Для регулярных и крупных партий условия обсудим с менеджером.</p><a class="btn ol" href="#contact">Обсудить</a></div><img loading="lazy" alt="Контейнеровоз в море" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/a5e13252-68f4-4ba4-b787-af49f25f6166.jpg"></article>
+      <article class="pc rv"><div class="pc-t"><h3>Коммерческий груз в Узбекистан</h3><p>Косметика от $12 за кг, БАДы и витамины $15, автозапчасти $14. По фактическому весу.</p><a class="btn ol" href="uzbekistan.html" data-page="Доставка в Узбекистан">Подробнее</a></div><img loading="lazy" alt="Самолёт в небе" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/416c0180-1109-4881-b5e3-bdc41c652c56.jpg"></article>
     </div>
   </div>
 </section>
 
-<!-- ======== COUNTRIES: expanding panels ======== -->
 <section class="sec" id="countries" style="padding-top:40px">
   <div class="wrap">
     <h2 class="h2 left rv">Выберите страну</h2>
     <div class="cx rv">
       <article class="cx-p on" data-i="0" tabindex="0" role="button" aria-expanded="true">
-        <img alt="" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/84d6e186-1d6e-4fcd-9587-71c80b1dfa1d.jpg">
-        <div class="cx-in"><span class="cx-n">01</span><h3 class="cx-t">Россия</h3>
-          <div class="cx-b"><dl><div><dt>Самолёт</dt><dd>около 7 дней, $18 за кг</dd></div><div><dt>Доступный</dt><dd>около 25 дней, $5 за кг</dd></div></dl><a class="btn w" href="rossiya.html" data-page="Доставка в Россию">Подробнее</a></div></div>
+        <img alt="Поезд среди полей" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/84d6e186-1d6e-4fcd-9587-71c80b1dfa1d.jpg">
+        <div class="cx-in"><span class="cx-n"><img class="cx-f" src="assets/flag-ru.svg" alt="" width="32" height="24"></span><h3 class="cx-t">Россия</h3>
+          <div class="cx-b"><dl><div><dt>Авиа</dt><dd>7–12 дней, $20 за кг</dd></div><div><dt>Доступный (контейнер)</dt><dd>около 35 дней, от $6 за кг</dd></div></dl><a class="btn w" href="rossiya.html" data-page="Доставка в Россию">Подробнее</a></div></div>
       </article>
       <article class="cx-p" data-i="1" tabindex="0" role="button" aria-expanded="false">
-        <img alt="" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/a5e13252-68f4-4ba4-b787-af49f25f6166.jpg">
-        <div class="cx-in"><span class="cx-n">02</span><h3 class="cx-t">Казахстан</h3>
-          <div class="cx-b"><dl><div><dt>Самолёт</dt><dd>около 3 дней, $10,5 за кг</dd></div><div><dt>Контейнер до Алматы</dt><dd>12–15 дней, от $3 за кг</dd></div></dl><a class="btn w" href="kazakhstan.html" data-page="Доставка в Казахстан">Подробнее</a></div></div>
+        <img alt="Контейнеровоз в море" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/a5e13252-68f4-4ba4-b787-af49f25f6166.jpg">
+        <div class="cx-in"><span class="cx-n"><img class="cx-f" src="assets/flag-kz.svg" alt="" width="32" height="24"></span><h3 class="cx-t">Казахстан</h3>
+          <div class="cx-b"><dl><div><dt>Авиа</dt><dd>3 дня, $11 за кг</dd></div><div><dt>Доступный (контейнер)</dt><dd>около 15 дней, от $3 за кг</dd></div></dl><a class="btn w" href="kazakhstan.html" data-page="Доставка в Казахстан">Подробнее</a></div></div>
       </article>
       <article class="cx-p" data-i="2" tabindex="0" role="button" aria-expanded="false">
-        <img alt="" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/f7c28d55-7a31-4c63-9563-a9cbe3527b90.jpg">
-        <div class="cx-in"><span class="cx-n">03</span><h3 class="cx-t">Кыргызстан</h3>
-          <div class="cx-b"><dl><div><dt>Контейнер</dt><dd>10–14 дней, $2,7 за кг</dd></div><div><dt>Самолёт</dt><dd>около 5 дней, цена по запросу</dd></div></dl><a class="btn w" href="kyrgyzstan.html" data-page="Доставка в Кыргызстан">Подробнее</a></div></div>
+        <img alt="Фургон на дороге" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/f7c28d55-7a31-4c63-9563-a9cbe3527b90.jpg">
+        <div class="cx-in"><span class="cx-n"><img class="cx-f" src="assets/flag-kg.svg" alt="" width="32" height="24"></span><h3 class="cx-t">Кыргызстан</h3>
+          <div class="cx-b"><dl><div><dt>Доступный (контейнер)</dt><dd>12–14 дней, от $3 за кг</dd></div><div><dt>Авиа</dt><dd>$11 за кг, вылеты по вт и пт</dd></div></dl><a class="btn w" href="kyrgyzstan.html" data-page="Доставка в Кыргызстан">Подробнее</a></div></div>
       </article>
       <article class="cx-p" data-i="3" tabindex="0" role="button" aria-expanded="false">
-        <img alt="" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/5da9cba9-9d0a-406b-b183-87fe9d4a8128.jpg">
-        <div class="cx-in"><span class="cx-n">04</span><h3 class="cx-t">Беларусь</h3>
-          <div class="cx-b"><dl><div><dt>Самолёт</dt><dd>около 10 дней</dd></div><div><dt>Экспресс и доступный</dt><dd>около 20 и 30 дней, цена по запросу</dd></div></dl><a class="btn w" href="belarus.html" data-page="Доставка в Беларусь">Подробнее</a></div></div>
+        <img alt="Грузовик у ворот склада" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/5da9cba9-9d0a-406b-b183-87fe9d4a8128.jpg">
+        <div class="cx-in"><span class="cx-n"><img class="cx-f" src="assets/flag-by.svg" alt="" width="32" height="24"></span><h3 class="cx-t">Беларусь</h3>
+          <div class="cx-b"><dl><div><dt>Экспресс</dt><dd>до вашего города</dd></div><div><dt>Доступный (контейнер)</dt><dd>цену и срок считает калькулятор</dd></div></dl><a class="btn w" href="belarus.html" data-page="Доставка в Беларусь">Подробнее</a></div></div>
       </article>
       <article class="cx-p" data-i="4" tabindex="0" role="button" aria-expanded="false">
-        <img alt="" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/416c0180-1109-4881-b5e3-bdc41c652c56.jpg">
-        <div class="cx-in"><span class="cx-n">05</span><h3 class="cx-t">Узбекистан</h3>
-          <div class="cx-b"><dl><div><dt>Самолёт</dt><dd>5–7 дней, 12 000 ₩ за кг</dd></div><div><dt>Для бизнеса</dt><dd>коммерческий груз и электроника поштучно</dd></div></dl><a class="btn w" href="uzbekistan.html" data-page="Доставка в Узбекистан">Подробнее</a></div></div>
+        <img alt="Самолёт в небе" loading="lazy" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/416c0180-1109-4881-b5e3-bdc41c652c56.jpg">
+        <div class="cx-in"><span class="cx-n"><img class="cx-f" src="assets/flag-uz.svg" alt="" width="32" height="24"></span><h3 class="cx-t">Узбекистан</h3>
+          <div class="cx-b"><dl><div><dt>Авиа</dt><dd>5 дней, 12 000 ₩ за кг</dd></div><div><dt>Для бизнеса</dt><dd>коммерческий груз от $12 за кг</dd></div></dl><a class="btn w" href="uzbekistan.html" data-page="Доставка в Узбекистан">Подробнее</a></div></div>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ======== COMPARE: plain table ======== -->
-<section class="sec" id="why" style="padding-top:40px">
-  <div class="wrap">
-    <div class="cmp rv">
-      <div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
-      <table class="cmp-t">
-        <thead><tr><th></th><th>Крупные международные службы</th><th>Мелкие посредники</th><th class="us">Везёт Корея</th></tr></thead>
-        <tbody>
-          <tr><th>Цена</th><td class="no" data-l="Крупные международные службы"><div>Одна цена для всех, договориться нельзя</div></td><td class="ok" data-l="Мелкие посредники"><div>Дёшево</div></td><td class="us ok" data-l="Везёт Корея"><div>Выбираете тариф под срок и бюджет. Сумму называем до отправки</div></td></tr>
-          <tr><th>Сроки</th><td class="ok" data-l="Крупные международные службы"><div>Надёжно</div></td><td class="no" data-l="Мелкие посредники"><div>Как получится</div></td><td class="us ok" data-l="Везёт Корея"><div>По графику: самолёт два раза в неделю, контейнер раз в неделю</div></td></tr>
-          <tr><th>Связь</th><td class="no" data-l="Крупные международные службы"><div>На связи трек-номер, а не человек</div></td><td class="no" data-l="Мелкие посредники"><div>Зависит от конкретного человека</div></td><td class="us ok" data-l="Везёт Корея"><div>Менеджер отвечает по-русски и объясняет, что с посылкой</div></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ======== BUYOUT teaser ======== -->
 <section class="sec" id="buyout" style="padding-top:40px">
   <div class="wrap byt">
     <div class="rv">
       <h2 class="h2 left">Покупаем в Корее за вас</h2>
-      <p class="lead">Пришлите ссылку на товар, а мы купим, проверим и отправим. Платите в рублях или тенге, зарубежная карта не нужна.</p>
+      <p class="lead">Пришлите ссылку на товар, а мы купим и отправим. Платите в вонах, рублях или тенге, иностранная карта не нужна.</p>
       <div class="byt-m"><span>Coupang</span><span>Gmarket</span><span>Olive Young</span><span>и другие магазины</span></div>
       <a class="btn o lg" href="vykup.html" data-page="Выкуп товаров">Как работает выкуп</a>
     </div>
@@ -925,16 +906,15 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
     <ol class="byt-s">
       <li><b>Присылаете ссылку</b><span>Товар с любой корейской площадки</span></li>
-      <li><b>Получаете полную цену</b><span>Товар и доставка одной суммой</span></li>
-      <li><b>Платите в своей валюте</b><span>Kaspi в Казахстане или рубли на карту Т-Банка</span></li>
-      <li><b>Выкупаем и проверяем</b><span>Присылаем фото товара со склада</span></li>
-      <li><b>Отправляем</b><span>Ближайшим рейсом, с трек-номером</span></li>
+      <li><b>Получаете полную цену</b><span>Товар, комиссия и доставка одной суммой</span></li>
+      <li><b>Платите в своей валюте</b><span>В вонах, рублях или тенге по курсу Банка Кореи +5%</span></li>
+      <li><b>Выкупаем</b><span>Заказ приезжает на наш склад в Корее</span></li>
+      <li><b>Отправляем</b><span>Ближайшей отправкой, с номером для отслеживания</span></li>
     </ol>
     </div>
   </div>
 </section>
 
-<!-- ======== PROMISE over video ======== -->
 <section class="promise">
   <video autoplay muted loop playsinline preload="metadata" src="https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/989ffd24-43b4-46e9-8d28-0a249de5a90f.mp4"></video>
   <div class="ov"></div>
@@ -945,14 +925,14 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
   </div>
 </section>
 
-<!-- ======== CONTACT (CTA card) ======== -->
 <section class="sec" id="contact">
   <div class="wrap">
     <div class="ctc rv">
       <div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
       <div class="ctc-l">
-        <h2 class="ctc-h">Посчитаем доставку и назовём ближайший рейс</h2>
-        <div class="ctc-ch"><button class="chip" data-soon="Ссылку на Telegram добавим, когда клиент пришлёт контакт"><i></i>Telegram</button><button class="chip" data-soon="Адрес почты добавим, когда клиент пришлёт контакт"><i style="background:var(--orange)"></i>Почта</button></div>
+        <h2 class="ctc-h">Посчитаем доставку и назовём ближайшую отправку</h2>
+        <div class="ctc-ch"><a class="chip" href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener"><i></i>Telegram-бот</a><a class="chip" href="https://instagram.com/vezetkorea" target="_blank" rel="noopener"><i style="background:var(--orange)"></i>Instagram</a></div>
+        <p class="ctc-hrs">Менеджеры на связи ежедневно с 09:00 до 21:00 и отвечают в течение 15 минут</p>
       </div>
       <div class="fcard">
       <form id="lead" novalidate>
@@ -976,7 +956,6 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
   </div>
 </section>
 
-<!-- ======== FAQ ======== -->
 <section class="sec" id="faq" style="padding-top:20px">
   <div class="wrap faq">
     <div class="rv">
@@ -986,21 +965,20 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
     </div>
     <div class="rv">
       <div class="qs">
-        <div class="q"><button>Сколько стоит 1 кг?<i></i></button><div class="a"><div><p>Зависит от страны и тарифа. В Россию: авиа $18, экспресс $15, доступный $5. В Казахстан: авиа $10,5, контейнер до Алматы от $3 в зависимости от категории товара. Цены для остальных стран на их страницах.</p></div></div></div>
-        <div class="q"><button>Что нельзя отправлять?<i></i></button><div class="a"><div><p>Список зависит от страны и способа перевозки. Например, в Узбекистан не принимаем новые Samsung и iPhone последних моделей. Напишите менеджеру, что хотите отправить, и он ответит до того, как вы привезёте коробку.</p></div></div></div>
-        <div class="q"><button>Где сдать посылку?<i></i></button><div class="a"><div><p>В пунктах приёма в Инчхоне и Ансане, круглосуточно. Ещё курьер может забрать посылку по адресу в Корее, или её можно отправить на наш склад почтой.</p></div></div></div>
-        <div class="q"><button>Сколько едет посылка?<i></i></button><div class="a"><div><p>Россия: авиа около 7 дней, экспресс 15, доступный 25. Казахстан: авиа около 3 дней, контейнер 12–15. Кыргызстан: авиа около 5 дней, контейнер 10–14. Беларусь: 10, 20 и 30 дней. Узбекистан: 5–7 дней.</p></div></div></div>
-        <div class="q"><button>Как оплатить?<i></i></button><div class="a"><div><p>В Казахстане переводом на Kaspi, в России рублями на карту Т-Банка. Отправки в Кыргызстан и Узбекистан оплачиваются в вонах.</p></div></div></div>
+        <div class="q"><button>Сколько стоит 1 кг?<i></i></button><div class="a"><div><p>Зависит от страны и тарифа. В Россию: авиа $20, экспресс от $16 под ключ до вашего города, доступный (контейнер) от $6 до Москвы. В Казахстан: авиа $11, доступный (контейнер) от $3 в зависимости от категории товара. Цены для остальных стран на их страницах. Упаковка считается отдельно, от 2 000 ₩.</p></div></div></div>
+        <div class="q"><button>Что можно отправить?<i></i></button><div class="a"><div><p>Что можно отправить, подскажет менеджер. <a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener">Напишите в Telegram-бот</a>, что хотите отправить, и вам ответят до того, как вы привезёте коробку.</p></div></div></div>
+        <div class="q"><button>Где сдать посылку?<i></i></button><div class="a"><div><p>В одном из четырёх пунктов приёма: в Инчхоне круглосуточно, в Ансане, Хонсоне и Кимхэ с 09:00 до 22:00. Можно отправить посылку на наш склад почтой, адрес пришлёт менеджер.</p></div></div></div>
+        <div class="q"><button>Сколько едет посылка?<i></i></button><div class="a"><div><p>Россия: авиа 7–12 дней, экспресс 15–25, доступный (контейнер) около 35. Казахстан: авиа 3 дня, доступный (контейнер) около 15. Кыргызстан: доступный (контейнер) 12–14 дней со дня погрузки. Узбекистан: авиа 5 дней. Беларусь: срок до вашего города считает калькулятор.</p></div></div></div>
+        <div class="q"><button>Как оплатить?<i></i></button><div class="a"><div><p>Все суммы считаем в вонах по курсу Банка Кореи +5%. Оплатить можно в вонах, рублях или тенге. Итоговую сумму называем до оплаты, после оплаты она не меняется.</p></div></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ======== FINAL + FOOTER ======== -->
 <section class="final">
   <div class="edge top"><div class="f"></div><svg><use href="#stL"/></svg><div class="gap"></div><svg><use href="#stR"/></svg><div class="f"></div></div>
   <div class="cta rv">
-    <h2 class="slogan" aria-label="Везёт! Везём!"><span class="nw">Вез<span class="yo">е</span>т!</span> <span class="nw">Вез<span class="yo">е</span>м!</span></h2>
+    <h2 class="slogan"><span class="nw">Вез<span class="yo">ё</span>т!</span> <span class="nw">Вез<span class="yo">ё</span>м!</span></h2>
     <a class="btn o lg" href="tarify.html#calc">Рассчитать доставку</a>
   </div>
   <div class="ftr">
@@ -1008,12 +986,12 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
       <div class="fgrid">
         <div>
           <svg class="logo" viewBox="0 0 444 230" style="color:#FFFFFF"><use href="#logo"/></svg>
-          <div class="badge mono"><b>24/7</b>Пункты приёма<br>Инчхон · Ансан</div>
+          <div class="badge mono"><b>24/7</b>Пункт приёма<br>в Инчхоне</div>
         </div>
         <div class="fcol"><div class="mono">Доставка</div><a href="rossiya.html" data-page="Доставка в Россию">Россия</a><a href="kazakhstan.html" data-page="Доставка в Казахстан">Казахстан</a><a href="kyrgyzstan.html" data-page="Доставка в Кыргызстан">Кыргызстан</a><a href="belarus.html" data-page="Доставка в Беларусь">Беларусь</a><a href="uzbekistan.html" data-page="Доставка в Узбекистан">Узбекистан</a><a href="tarify.html" data-page="Тарифы и калькулятор">Все тарифы</a></div>
         <div class="fcol"><div class="mono">Услуги</div><a href="vykup.html" data-page="Выкуп товаров">Выкуп товаров</a><a href="biznes.html" data-page="Бизнесу">Бизнесу</a></div>
-        <div class="fcol"><div class="mono">Помощь</div><a href="kak-otpravit.html" data-page="Как отправить посылку">Как отправить посылку</a><a href="punkty.html" data-page="Пункты приёма и выдачи">Пункты приёма и выдачи</a><a href="#top" id="ftTrack">Отследить посылку</a><a href="voprosy.html" data-page="Вопросы и ответы">Вопросы и ответы</a></div>
-        <div class="fcol"><div class="mono">Компания</div><a href="o-kompanii.html" data-page="О компании">О компании</a><a href="kontakty.html" data-page="Контакты">Контакты</a><a href="kabinet.html" data-page="Личный кабинет">Личный кабинет</a></div>
+        <div class="fcol"><div class="mono">Помощь</div><a href="kak-otpravit.html" data-page="Как отправить посылку">Как отправить посылку</a><a href="punkty.html" data-page="Пункты приёма">Пункты приёма</a><a href="#top" id="ftTrack">Отследить посылку</a><a href="voprosy.html" data-page="Вопросы и ответы">Вопросы и ответы</a></div>
+        <div class="fcol"><div class="mono">Компания</div><a href="o-kompanii.html" data-page="О компании">О компании</a><a href="kontakty.html" data-page="Контакты">Контакты</a><a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener">Telegram-бот</a><a href="https://instagram.com/vezetkorea" target="_blank" rel="noopener">Instagram</a></div>
       </div>
       <div class="fbot"><span>© 2026 Везёт Корея</span><span class="fl"><a href="politika.html" data-page="Политика конфиденциальности">Политика конфиденциальности</a><a href="pravila.html" data-page="Правила перевозки">Правила перевозки</a></span></div>
     </div>
@@ -1022,6 +1000,7 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
 
 <div class="toast" id="toast"></div>
 
+<script src="assets/data.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -1032,16 +1011,13 @@ function toast(m){toastEl.textContent=m;toastEl.classList.add('on');clearTimeout
 $$('[data-soon]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();toast(a.dataset.soon);}));
 
 /* ---------- HERO chapters ---------- */
-/* ролик v12 (Kling 4K → 2560×1440 для компьютера, ключевой кадр каждые 8; 720×1280 из центра кадра для телефона, каждый кадр ключевой; 13,3 с — без стоп-кадра в начале, движение сразу со скроллом): 5 остановок, только заголовки;
-   на каждую одинаковый отрезок скролла, опорные секунды — середины пауз в ролике
-   (0 девушка с коробкой · 1,9 передаёт коробку, живая пауза · [Бонго сверху — без остановки] · 6,55 Бонго из точек ·
-   8,77 корабль — середина «поезд → корабль → самолёт» · 13,25 карта маршрутов) */
+/* ролик первого экрана: 5 остановок с заголовками, на каждую одинаковый отрезок прокрутки; опорные секунды — середины пауз в ролике */
 const ANCH=[0,1.9,6.55,8.77,13.25], NSEG=ANCH.length-1;
 const CH=[
  {hero:1, h:'Экспресс-доставка посылок и грузов из Кореи в СНГ'},
- {h:'Круглосуточный приём в Инчхоне и Ансане или курьер на дом'},
+ {h:'Четыре пункта приёма в Корее, в Инчхоне — круглосуточно'},
  {h:'Следите за посылкой по трек-номеру'},
- {h:'Самолётом от 3 дней, контейнером от $2,7 за кг'},
+ {h:'Авиа от 3 дней, контейнером от $3 за кг'},
  {last:1, h:'Посчитайте доставку за минуту', cta:2}
 ];
 const box=$('#chs');
@@ -1057,7 +1033,7 @@ CH.forEach((c,i)=>{
   d.innerHTML=html;box.appendChild(d);
   c.el=d;c.words=c.h?split(d.querySelector('.hh')):[];
 });
-document.addEventListener('click',e=>{const a=e.target.closest('[data-focus-track]');if(a){e.preventDefault();const inp=$('#trackIn');if(getComputedStyle($('#trackForm')).display==='none'){$('#nav').classList.add('open');}setTimeout(()=>inp.focus(),50);toast('Введите трек-номер. Для примера: VK-20481');}});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-focus-track]');if(a){e.preventDefault();const inp=$('#trackIn');if(getComputedStyle($('#trackForm')).display==='none'){$('#nav').classList.add('open');}setTimeout(()=>inp.focus(),50);toast('Введите номер посылки. Для примера: '+V.DEMO_NO);}});
 
 const hw=$('#hw'), routeEl=$('.route');
 const v=$('#v'), story=$('.story'), rl=$('#rl'), rd=$('#rd'), hint=$('#hint'), loading=$('#loading');
@@ -1129,26 +1105,11 @@ requestAnimationFrame(render);
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.14});
 $$('.rv').forEach(el=>io.observe(el));
 
-/* ---------- tariffs data for the hero widget (prototype «Везёт Корея11»); full calculator lives on the tariffs page ---------- */
-const MARKUP=1.03;
-const CATS=[['Личные посылки (микс)',5.5]];
-const C={
- ru:{n:'Россию',g:'России',cur:'₽',fx:84.9048,src:'ЦБ РФ',t:[{k:'avia',name:'Авиа',p:18,d:'7'},{k:'exp',name:'Экспресс',p:15,d:'15'},{k:'eco',name:'Доступный',p:5,d:'25'},{k:'vvo',name:'Владивосток',p:5,d:'14',title:'Автозапчасти до Владивостока'}]},
- kz:{n:'Казахстан',g:'Казахстана',cur:'₸',fx:453.93,src:'Нацбанка РК',t:[{k:'avia',name:'Авиа',p:10.5,d:'3'},{k:'aviav',name:'Авиа объёмный',p:18.5,d:'3'},{k:'eco',name:'Контейнер',cat:1,d:'12–15',title:'Контейнер до Алматы'}],note:'Цена до Алматы. До других городов Казахстана посчитает менеджер.'},
- kg:{n:'Кыргызстан',g:'Кыргызстана',cur:'₩',fx:1338,src:'Seoul Money Brokerage',t:[{k:'avia',name:'Авиа',p:null,d:'5'},{k:'eco',name:'Контейнер',p:2.7,d:'10–14'}],note:'Оплата в вонах. Контейнер: 10–14 дней со дня погрузки, погрузка каждую неделю.'},
- by:{n:'Беларусь',g:'Беларуси',cur:'Br',fx:null,t:[{k:'avia',name:'Авиа',p:null,d:'10'},{k:'exp',name:'Экспресс',p:null,d:'20'},{k:'eco',name:'Доступный',p:null,d:'30'}]},
- uz:{n:'Узбекистан',g:'Узбекистана',krw:1,t:[{k:'avia',name:'Авиа',pk:12000,d:'5–7'}],lim:[5,30],note:'Оплата в вонах. Груз принимаем по понедельникам, вылет во вторник, выдача в конце недели.'}
-};
-const fmt=n=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(n);
-const fmtKg=w=>String(w).replace('.',',')+' кг';
-const days=t=>t.d.includes('–')?t.d+' дн.':'около '+t.d+' дн.';
-const usdS=n=>'$'+n.toLocaleString('ru-RU',{maximumFractionDigits:2});
-function cost(code,t,w){
-  const c=C[code];
-  if(c.krw) return t.pk==null?null:{main:fmt(t.pk*w)+' ₩',ap:false};
-  const p=t.cat?CATS[0][1]:t.p; if(p==null||!c.fx) return null;
-  return {main:fmt(p*w*c.fx*MARKUP)+' '+c.cur,ap:true};
-}
+/* ---------- тарифы для виджета первого экрана: общий источник assets/data.js (ТЗ 02.11, раздел 6) ---------- */
+const V=window.VK, C=V.C, fmt=V.fmt, fmtKg=V.fmtKg, days=V.days;
+const CATI=Math.max(0,V.CATS.findIndex(x=>/^Личные/.test(x[0])));
+/* предварительная сумма в вонах вместе с упаковкой; null — считает менеджер */
+function cost(code,t,w){const m=V.cost(code,t,w,CATI); if(!m) return null; const p=V.pack(w), v=m.v+(p?p.krw:0); return {main:'от '+fmt(v)+' ₩',v};}
 
 /* ---------- links to inner pages: страницы собраны (29.10), ссылки ведут на файлы рядом ---------- */
 /* кнопки «Рассчитать доставку» ведут на страницу тарифов с калькулятором (tarify.html#calc) */
@@ -1167,13 +1128,12 @@ lead.addEventListener('input',()=>send.classList.toggle('ok',okLead()));
 lead.addEventListener('submit',e=>{e.preventDefault();if(!okLead()){toast('Заполните имя и телефон или Telegram');return;}busy(send,900).then(()=>{lead.style.display='none';$('#done').style.display='block';});});
 
 /* ---------- tracking ---------- */
-const DEMO={'VK-20481':{w:'4,2 кг',t:'Доступный',city:'Новосибирск',st:3,day:18,tot:25},'VK-31007':{w:'1,1 кг',t:'Авиа',city:'Алматы',st:4,day:3,tot:3},'VK-10552':{w:'7,8 кг',t:'Экспресс',city:'Минск',st:1,day:4,tot:15}};
-const STG=['Принята на складе в Сеуле','Отправлена из Кореи','Таможенное оформление','В пути по стране назначения','Готова к выдаче'];
+const DEMO=V.DEMO, STG=V.STG;
 const pop=$('#pop');
 $('#trackForm').addEventListener('submit',e=>{
   e.preventDefault();const k=$('#trackIn').value.trim().toUpperCase().replace(/\s/g,'');const d=DEMO[k];
   if(d){pop.innerHTML='<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<span class="'+(i<=d.st?'on':'')+'"></span>').join('')+'</div><small>'+k+' · '+d.t+' · '+d.w+'. День '+d.day+' из '+d.tot+'. Получение: '+d.city+'.</small>';}
-  else{pop.innerHTML='<b>Посылки с таким номером нет</b><small>Код приходит в сообщении менеджера. Для примера попробуйте VK-20481.</small>';}
+  else{pop.innerHTML='<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте '+V.DEMO_NO+'.</small>';}
   pop.classList.add('on');
 });
 document.addEventListener('click',e=>{if(!e.target.closest('#trackForm'))pop.classList.remove('on');});
@@ -1205,23 +1165,23 @@ function roll(el,text){
 /* ---------- hero widget: calc / track ---------- */
 const hwC=$('#hwCountry'), hwW=$('#hwW'), hwT=$('#hwT'), hwRes=$('#hwRes'), hwNote=$('#hwNote'), hwTRes=$('#hwTRes');
 const setHW=()=>document.documentElement.style.setProperty('--hwh',hw.offsetHeight+'px');
-function hwFill(){const code=hwC.value; if(!code){hwT.innerHTML='<option value="" disabled selected>Тариф</option>'+['Авиа','Экспресс','Контейнер'].map(n=>'<option disabled>'+n+'</option>').join(''); hwNote.textContent='Самолёт, экспресс или контейнер'; return;}
+function hwFill(){const code=hwC.value; if(!code){hwT.innerHTML='<option value="" disabled selected>Тариф</option>'+['Авиа','Экспресс','Контейнер'].map(n=>'<option disabled>'+n+'</option>').join(''); hwNote.textContent='Авиа, экспресс или контейнер'; return;}
   const prev=hwT.value; hwT.innerHTML=C[code].t.map(t=>'<option value="'+t.k+'">'+t.name+' · '+days(t)+'</option>').join(''); if(C[code].t.some(t=>t.k===prev)) hwT.value=prev;
-  const L=C[code].lim; hwNote.textContent=L?'Одно место от '+L[0]+' до '+L[1]+' кг':(code==='kz'?'Контейнер считаем до Алматы':'Цена до отправки');}
+  hwNote.textContent=code==='by'?'Сумму до города считает калькулятор':'Цена в вонах вместе с упаковкой';}
 hwFill();
 hwC.addEventListener('change',()=>{hwFill();hwRes.classList.remove('on');setHW();});
 $$('#hwCalc [data-c]').forEach(a=>a.addEventListener('click',()=>{hwC.value=a.dataset.c;hwFill();hwRes.classList.remove('on');setHW();}));
 $$('#hwCalc [data-w]').forEach(a=>a.addEventListener('click',()=>{hwW.value=a.dataset.w;hwW.focus();}));
 function hwBars(code,wc,sel){const c=C[code]; if(c.t.length<2) return '';
-  const vs=c.t.map(t=>{const m=cost(code,t,wc); return {t,m,v:m?+m.main.replace(/[^\d]/g,''):null};}), mx=Math.max(1,...vs.map(x=>x.v||0));
-  return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.t.k===sel?' on':'')+(x.v==null?' na':'')+'" data-k="'+x.t.k+'" title="'+x.t.name+' · '+days(x.t)+'"><span class="hb-v">'+(x.m?x.m.main:'по запросу')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.t.name+'</span></button>').join('')+'</div>';}
+  const vs=c.t.map(t=>{const m=cost(code,t,wc); return {t,m,v:m?m.v:null};}), mx=Math.max(1,...vs.map(x=>x.v||0));
+  return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.t.k===sel?' on':'')+(x.v==null?' na':'')+'" data-k="'+x.t.k+'" title="'+x.t.name+' · '+days(x.t)+'"><span class="hb-v">'+(x.m?x.m.main:'менеджер')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.t.name+'</span></button>').join('')+'</div>';}
 function hwRun(){
   const code=hwC.value, w=parseFloat(String(hwW.value).replace(',','.'));
-  const c=C[code], t=c.t.find(x=>x.k===hwT.value)||c.t[0], L=c.lim||[0.5,30], wc=Math.min(Math.max(w,L[0]),L[1]), m=cost(code,t,wc), name=t.title||t.name+' в '+c.n;
+  const c=C[code], t=c.t.find(x=>x.k===hwT.value)||c.t[0], L=[0.5,30], wc=Math.min(Math.max(w,L[0]),L[1]), m=cost(code,t,wc), name=t.title||t.name+' в '+c.n;
   let html, price='';
   if(w>30) html='<b>Посчитает менеджер</b><span>Посылки тяжелее 30 кг считаем индивидуально.</span><a href="#contact">Оставить заявку</a>';
-  else if(m){price=(m.ap?'≈ ':'')+m.main; html='<b class="hw-p"></b><span>'+name+', '+fmtKg(w)+' · '+days(t)+(t.cat?' · '+CATS[0][0].toLowerCase():'')+(wc!==w?' · одно место от '+fmtKg(L[0])+' до '+fmtKg(L[1])+', считаем '+fmtKg(wc):'')+'</span><a href="tarify.html" data-page="Тарифы и калькулятор">Все тарифы и калькулятор</a>'+hwBars(code,wc,t.k);}
-  else html='<b>Цену назовёт менеджер</b><span>'+name+', '+fmtKg(wc)+' · '+days(t)+'</span><a href="#contact">Оставить заявку</a>'+hwBars(code,wc,t.k);
+  else if(m){price=m.main; html='<b class="hw-p"></b><span>'+name+', '+fmtKg(w)+' · '+days(t)+(t.cat?' · '+V.CATS[CATI][0].toLowerCase():'')+' · с упаковкой'+(wc!==w?' · считаем '+fmtKg(wc):'')+'</span><a href="tarify.html" data-page="Тарифы и калькулятор">Все тарифы и калькулятор</a>'+hwBars(code,wc,t.k);}
+  else html='<b>Рассчитает менеджер</b><span>'+name+', '+fmtKg(wc)+' · '+days(t)+(t.min&&wc<t.min?' · тариф от '+fmtKg(t.min):t.max&&wc>t.max?' · тариф до '+fmtKg(t.max):'')+'</span><a href="'+V.BOT+'" target="_blank" rel="noopener">Написать в Telegram</a>'+hwBars(code,wc,t.k);
   hwRes.innerHTML=html; hwRes.classList.add('on');
   const pb=hwRes.querySelector('.hw-p'); if(pb) roll(pb,price);
   setHW(); setTimeout(setHW,60);
@@ -1232,11 +1192,11 @@ $('#hwCalc').addEventListener('submit',e=>{e.preventDefault();
   busy($('#hwCalc .hw-go'),650).then(hwRun);});
 hwRes.addEventListener('click',e=>{const b=e.target.closest('.hb'); if(!b) return; hwT.value=b.dataset.k; hwRun();});
 $$('.hw-tab').forEach(b=>b.addEventListener('click',()=>{const pn=b.dataset.p; hw.dataset.p=pn; $$('.hw-tab').forEach(x=>x.classList.toggle('on',x===b)); $$('.hw-pane').forEach(x=>x.classList.toggle('on',x.dataset.p===pn)); setHW();}));
-$('#hwWhere').addEventListener('click',()=>toast('Номер приходит в сообщении менеджера после отправки. Для примера: VK-20481'));
+$('#hwWhere').addEventListener('click',()=>toast('Номер приходит в сообщении менеджера после отправки. Для примера: '+V.DEMO_NO));
 $('#hwTrack').addEventListener('submit',e=>{e.preventDefault(); const k=$('#hwCode').value.trim().toUpperCase().replace(/\s/g,''); if(!k){toast('Введите номер посылки');return;} const d=DEMO[k];
   busy($('#hwTrack .hw-go'),550).then(()=>{
   hwTRes.innerHTML = d ? '<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<i class="'+(i<=d.st?'on':'')+'"></i>').join('')+'</div><span>'+k+' · '+d.t+' · '+d.w+' · день '+d.day+' из '+d.tot+' · '+d.city+'</span>'
-                       : '<b>Не нашли посылку</b><span>Проверьте номер из сообщения менеджера. Для примера: VK-20481.</span>';
+                       : '<b>Не нашли посылку</b><span>Проверьте номер из сообщения менеджера. Для примера: '+V.DEMO_NO+'.</span>';
   hwTRes.classList.add('on'); setHW();});});
 addEventListener('resize',setHW); setHW(); if(document.fonts) document.fonts.ready.then(setHW);
 
