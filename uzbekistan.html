@@ -83,36 +83,32 @@
 <section class="sec" id="calc" style="padding-top:40px">
   <div class="wrap">
     <div class="sh2 rv"><div><h2 class="h2 left">Сколько стоит доставка в Узбекистан</h2></div></div>
-    <div class="calcwrap">
+    <div class="calcwrap vc">
       <div class="cl rv">
+        <div class="fld full cfCountry"><span>Страна получения</span><div class="tabs cCountries" role="group" aria-label="Страна получения"></div></div>
         <div class="fg">
-          <label class="fld"><span>Страна получения</span>
-            <select class="cCountry"><option value="ru">Россия</option><option value="kz">Казахстан</option><option value="kg">Кыргызстан</option><option value="by">Беларусь</option><option value="uz">Узбекистан</option></select></label>
-          <label class="fld"><span>Город</span><input class="cCity" placeholder="Например, Москва"></label>
-          <div class="fld full"><span>Тариф</span><div class="tabs cTabs"></div></div>
-          <label class="fld full catFld" hidden><span>Категория товара</span><select class="cCat"></select></label>
-          <div class="range full">
-            <div class="top"><span>Вес посылки</span><b class="wOut">4 кг</b></div>
-            <input type="range" class="cW" min="0.5" max="30" step="0.5" value="4" aria-label="Вес посылки, кг">
-            <div class="ticks mono"><span class="tkMin">0,5 кг</span><span>10</span><span>20</span><span>30 кг</span></div>
-          </div>
+          <label class="fld cfCity"><span>Город</span><select class="cCity"></select></label>
+          <label class="fld"><span>Вес посылки, кг</span><input class="cW" type="number" inputmode="decimal" min="0.1" max="100" step="0.1" value="5"></label>
+          <div class="fld full"><span>Размер коробки</span><div class="tabs cBoxes" role="group" aria-label="Размер коробки"></div>
+            <div class="cDims" hidden><input class="dL" type="number" min="1" placeholder="Длина, см" aria-label="Длина, см"><input class="dW" type="number" min="1" placeholder="Ширина, см" aria-label="Ширина, см"><input class="dH" type="number" min="1" placeholder="Высота, см" aria-label="Высота, см"></div>
+            <p class="cHint" aria-live="polite"></p></div>
+          <label class="fld full cfCat"><span>Что в посылке (для «Доступного»)</span><select class="cCat"></select></label>
+          <label class="fld cfUz" hidden><span>Тип груза</span><select class="cUz"></select></label>
+          <label class="fld cfKg" hidden><span>Тип груза</span><select class="cKg"></select></label>
+          <div class="fld full"><span>Оплачу в</span><div class="tabs cPay" role="group" aria-label="Валюта оплаты"></div></div>
         </div>
-        <div class="cnote"><b>Как считаем</b>Тариф умножаем на оплачиваемый вес: больший из фактического и объёмного. Все суммы в вонах по курсу Банка Кореи +5%, оплатить можно в вонах, рублях или тенге. Упаковка считается отдельной строкой. Итоговую сумму называем до оплаты, после оплаты она не меняется.</div>
+        <div class="cnote"><b>Как считаем</b>Тариф умножаем на оплачиваемый вес: больший из фактического и объёмного. Все суммы в вонах по курсу Банка Кореи +5%, оплатить можно в вонах, рублях или тенге. Упаковка — отдельной строкой по фактическому весу. Итоговую сумму называем до оплаты, после оплаты она не меняется.</div>
       </div>
-      <div class="res rv">
+      <div class="res rv" aria-live="polite">
         <div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
         <p class="ttl rTtl"></p>
         <p class="sum rSum"></p>
         <div class="meta rMeta"></div>
-        <div class="rnote rNote"></div>
+        <div class="vcta rCta"></div>
         <hr>
         <h4 class="rAllT"></h4>
-        <div class="rBars"></div>
-        <div class="ask">
-          <p>Точную сумму и дату отправки назовёт менеджер.</p>
-          <form class="askForm"><input placeholder="Телефон или @ник в Telegram" aria-label="Телефон или Telegram"><button class="btn o">Получить расчёт</button></form>
-        </div>
-        <div class="note mono">* Расчёт предварительный. Точную сумму менеджер назовёт до оплаты</div>
+        <div class="vlist rList"></div>
+        <div class="note mono">* Расчёт предварительный. Точную сумму назовём после взвешивания на складе, до оплаты; после оплаты она не меняется. Курсы и доставка по городу в концепте — тестовые</div>
       </div>
     </div>
   </div>
@@ -178,6 +174,9 @@
 
 <div class="toast" id="toast"></div>
 <script src="assets/data.js"></script>
+<script src="assets/calc-tariffs.js"></script>
+<script src="assets/calc-core.js"></script>
+<script src="assets/calc-plan.js"></script>
 <script src="assets/site.js"></script>
 <script>
 (function(){

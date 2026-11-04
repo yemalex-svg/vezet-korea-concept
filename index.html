@@ -1001,6 +1001,9 @@ body{font-size:var(--fs-body);line-height:var(--lh-body)}
 <div class="toast" id="toast"></div>
 
 <script src="assets/data.js"></script>
+<script src="assets/calc-tariffs.js"></script>
+<script src="assets/calc-core.js"></script>
+<script src="assets/calc-plan.js"></script>
 <script>
 (function(){
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -1105,11 +1108,13 @@ requestAnimationFrame(render);
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.14});
 $$('.rv').forEach(el=>io.observe(el));
 
-/* ---------- тарифы для виджета первого экрана: общий источник assets/data.js (ТЗ 02.11, раздел 6) ---------- */
-const V=window.VK, C=V.C, fmt=V.fmt, fmtKg=V.fmtKg, days=V.days;
-const CATI=Math.max(0,V.CATS.findIndex(x=>/^Личные/.test(x[0])));
-/* предварительная сумма в вонах вместе с упаковкой; null — считает менеджер */
-function cost(code,t,w){const m=V.cost(code,t,w,CATI); if(!m) return null; const p=V.pack(w), v=m.v+(p?p.krw:0); return {main:'от '+fmt(v)+' ₩',v};}
+/* ---------- виджет первого экрана: тот же расчёт, что на странице тарифов (ядро калькулятора клиента, assets/calc-*.js) ---------- */
+const V=window.VK, P=window.VezetPlan, TT=P.T;
+const fmtKg=w=>String(w).replace('.',',')+' кг';
+const CODES={ru:'RU',kz:'KZ',kg:'KG',by:'BY',uz:'UZ'};
+/* в виджете нет коробки и города: берём самую маленькую коробку, в которую входит вес, и первый город из списка */
+function hwCalcR(code,w){const b=TT.boxes.find(x=>w<=x.maxKg)||TT.boxes[TT.boxes.length-1];
+  return P.run({country:CODES[code],weightKg:w,dims:{l:b.l,w:b.w,h:b.h},box:b.id,category:'mix',pay:'KRW'});}
 
 /* ---------- links to inner pages: страницы собраны (29.10), ссылки ведут на файлы рядом ---------- */
 /* кнопки «Рассчитать доставку» ведут на страницу тарифов с калькулятором (tarify.html#calc) */
@@ -1132,7 +1137,7 @@ const DEMO=V.DEMO, STG=V.STG;
 const pop=$('#pop');
 $('#trackForm').addEventListener('submit',e=>{
   e.preventDefault();const k=$('#trackIn').value.trim().toUpperCase().replace(/\s/g,'');const d=DEMO[k];
-  if(d){pop.innerHTML='<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<span class="'+(i<=d.st?'on':'')+'"></span>').join('')+'</div><small>'+k+' · '+d.t+' · '+d.w+'. День '+d.day+' из '+d.tot+'. Получение: '+d.city+'.</small>';}
+  if(d){pop.innerHTML='<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<span class="'+(i<=d.st?'on':'')+'"></span>').join('')+'</div><small>'+k+' · получение: '+d.city+' · ожидаем '+d.eta+'</small>';}
   else{pop.innerHTML='<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте '+V.DEMO_NO+'.</small>';}
   pop.classList.add('on');
 });
@@ -1166,22 +1171,25 @@ function roll(el,text){
 const hwC=$('#hwCountry'), hwW=$('#hwW'), hwT=$('#hwT'), hwRes=$('#hwRes'), hwNote=$('#hwNote'), hwTRes=$('#hwTRes');
 const setHW=()=>document.documentElement.style.setProperty('--hwh',hw.offsetHeight+'px');
 function hwFill(){const code=hwC.value; if(!code){hwT.innerHTML='<option value="" disabled selected>Тариф</option>'+['Авиа','Экспресс','Контейнер'].map(n=>'<option disabled>'+n+'</option>').join(''); hwNote.textContent='Авиа, экспресс или контейнер'; return;}
-  const prev=hwT.value; hwT.innerHTML=C[code].t.map(t=>'<option value="'+t.k+'">'+t.name+' · '+days(t)+'</option>').join(''); if(C[code].t.some(t=>t.k===prev)) hwT.value=prev;
-  hwNote.textContent=code==='by'?'Сумму до города считает калькулятор':'Цена в вонах вместе с упаковкой';}
+  const w=parseFloat(String(hwW.value).replace(',','.'))||5, prev=hwT.value, cs=hwCalcR(code,w).cards;
+  hwT.innerHTML=cs.map(c=>'<option value="'+c.id+'">'+c.name+'</option>').join(''); if(cs.some(c=>c.id===prev)) hwT.value=prev;
+  hwNote.textContent='Цена в вонах вместе с упаковкой';}
 hwFill();
 hwC.addEventListener('change',()=>{hwFill();hwRes.classList.remove('on');setHW();});
 $$('#hwCalc [data-c]').forEach(a=>a.addEventListener('click',()=>{hwC.value=a.dataset.c;hwFill();hwRes.classList.remove('on');setHW();}));
-$$('#hwCalc [data-w]').forEach(a=>a.addEventListener('click',()=>{hwW.value=a.dataset.w;hwW.focus();}));
-function hwBars(code,wc,sel){const c=C[code]; if(c.t.length<2) return '';
-  const vs=c.t.map(t=>{const m=cost(code,t,wc); return {t,m,v:m?m.v:null};}), mx=Math.max(1,...vs.map(x=>x.v||0));
-  return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.t.k===sel?' on':'')+(x.v==null?' na':'')+'" data-k="'+x.t.k+'" title="'+x.t.name+' · '+days(x.t)+'"><span class="hb-v">'+(x.m?x.m.main:'менеджер')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.t.name+'</span></button>').join('')+'</div>';}
+$$('#hwCalc [data-w]').forEach(a=>a.addEventListener('click',()=>{hwW.value=a.dataset.w;hwW.focus();hwFill();}));
+hwW.addEventListener('change',hwFill);
+const tot=(c,pk)=>c.amount+(c.approx?(c.packAmount||0):(pk&&pk.status==='ok'?pk.amount:0));
+function hwBars(r,sel){const cs=r.cards; if(cs.length<2) return '';
+  const vs=cs.map(c=>({c,v:c.status==='ok'?tot(c,r.packaging):null})), mx=Math.max(1,...vs.map(x=>x.v||0));
+  return '<div class="hw-bars">'+vs.map(x=>'<button type="button" class="hb'+(x.c.id===sel?' on':'')+(x.v==null?' na':'')+'" data-k="'+x.c.id+'" title="'+x.c.name+(x.c.days?' · '+x.c.days:'')+'"><span class="hb-v">'+(x.v!=null?(x.c.approx?'≈ ':'')+'от '+P.fmt(x.v):'менеджер')+'</span><span class="hb-b" style="--h:'+(x.v?Math.max(.1,x.v/mx).toFixed(3):.1)+'"></span><span class="hb-n">'+x.c.name+'</span></button>').join('')+'</div>';}
 function hwRun(){
   const code=hwC.value, w=parseFloat(String(hwW.value).replace(',','.'));
-  const c=C[code], t=c.t.find(x=>x.k===hwT.value)||c.t[0], L=[0.5,30], wc=Math.min(Math.max(w,L[0]),L[1]), m=cost(code,t,wc), name=t.title||t.name+' в '+c.n;
+  const r=hwCalcR(code,w), c=r.cards.find(x=>x.id===hwT.value)||r.cards[0];
+  const name=c.name+' в '+r.countryTo+(r.city?', '+r.city.name:'');
   let html, price='';
-  if(w>30) html='<b>Посчитает менеджер</b><span>Посылки тяжелее 30 кг считаем индивидуально.</span><a href="#contact">Оставить заявку</a>';
-  else if(m){price=m.main; html='<b class="hw-p"></b><span>'+name+', '+fmtKg(w)+' · '+days(t)+(t.cat?' · '+V.CATS[CATI][0].toLowerCase():'')+' · с упаковкой'+(wc!==w?' · считаем '+fmtKg(wc):'')+'</span><a href="tarify.html" data-page="Тарифы и калькулятор">Все тарифы и калькулятор</a>'+hwBars(code,wc,t.k);}
-  else html='<b>Рассчитает менеджер</b><span>'+name+', '+fmtKg(wc)+' · '+days(t)+(t.min&&wc<t.min?' · тариф от '+fmtKg(t.min):t.max&&wc>t.max?' · тариф до '+fmtKg(t.max):'')+'</span><a href="'+V.BOT+'" target="_blank" rel="noopener">Написать в Telegram</a>'+hwBars(code,wc,t.k);
+  if(c.status==='ok'){price=(c.approx?'≈ ':'')+'от '+P.fmt(tot(c,r.packaging)); html='<b class="hw-p"></b><span>'+name+', '+fmtKg(w)+(c.term?' · '+c.term:'')+(c.dispatchText?' · ближайшая отправка '+c.dispatchText:'')+' · с упаковкой</span><a href="tarify.html#calc" data-page="Тарифы и калькулятор">Все тарифы и калькулятор</a>'+hwBars(r,c.id);}
+  else html='<b>Рассчитает менеджер</b><span>'+name+', '+fmtKg(w)+(c.note?' · '+c.note:'')+'</span><a href="'+P.BOT+'" target="_blank" rel="noopener">Написать в Telegram</a>'+hwBars(r,c.id);
   hwRes.innerHTML=html; hwRes.classList.add('on');
   const pb=hwRes.querySelector('.hw-p'); if(pb) roll(pb,price);
   setHW(); setTimeout(setHW,60);
@@ -1195,7 +1203,7 @@ $$('.hw-tab').forEach(b=>b.addEventListener('click',()=>{const pn=b.dataset.p; h
 $('#hwWhere').addEventListener('click',()=>toast('Номер приходит в сообщении менеджера после отправки. Для примера: '+V.DEMO_NO));
 $('#hwTrack').addEventListener('submit',e=>{e.preventDefault(); const k=$('#hwCode').value.trim().toUpperCase().replace(/\s/g,''); if(!k){toast('Введите номер посылки');return;} const d=DEMO[k];
   busy($('#hwTrack .hw-go'),550).then(()=>{
-  hwTRes.innerHTML = d ? '<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<i class="'+(i<=d.st?'on':'')+'"></i>').join('')+'</div><span>'+k+' · '+d.t+' · '+d.w+' · день '+d.day+' из '+d.tot+' · '+d.city+'</span>'
+  hwTRes.innerHTML = d ? '<b>'+STG[d.st]+'</b><div class="bar">'+STG.map((s,i)=>'<i class="'+(i<=d.st?'on':'')+'"></i>').join('')+'</div><span>'+k+' · получение: '+d.city+' · ожидаем '+d.eta+'</span>'
                        : '<b>Не нашли посылку</b><span>Проверьте номер из сообщения менеджера. Для примера: '+V.DEMO_NO+'.</span>';
   hwTRes.classList.add('on'); setHW();});});
 addEventListener('resize',setHW); setHW(); if(document.fonts) document.fonts.ready.then(setHW);

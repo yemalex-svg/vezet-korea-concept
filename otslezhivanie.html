@@ -140,6 +140,9 @@
 
 <div class="toast" id="toast"></div>
 <script src="assets/data.js"></script>
+<script src="assets/calc-tariffs.js"></script>
+<script src="assets/calc-core.js"></script>
+<script src="assets/calc-plan.js"></script>
 <script src="assets/site.js"></script>
 <script>
 (function(){
@@ -147,7 +150,7 @@ const {$,$$,toast,busy,roll,cards,initCalc,trackHTML}=window.VKUI, V=window.VK;
 const f=$('#trkF'), inp=$('#trkIn'), T=$('#trkT'), M=$('#trkM');
 function show(k){const d=V.DEMO[k];
   if(!d){T.textContent='Не нашли посылку';M.innerHTML='<span>Проверьте номер из сообщения менеджера. Для примера: '+V.DEMO_NO+'.</span>';return;}
-  T.textContent=V.STG[d.st];M.innerHTML='<span>'+k+' · '+d.t+' · '+d.w+'</span><span>День '+d.day+' из '+d.tot+'</span><span>Получение: '+d.city+'</span>';}
+  T.textContent=V.STG[d.st];M.innerHTML='<span>'+k+'</span><span>Получение: '+d.city+'</span><span>Ожидаем '+d.eta+'</span>';}
 f.addEventListener('submit',e=>{e.preventDefault();const k=inp.value.trim().toUpperCase().replace(/\s/g,'');if(!k){toast('Введите номер посылки');return;}busy(f.querySelector('.btn'),550).then(()=>show(k));});
 $$('.trk-q [data-n]').forEach(a=>a.addEventListener('click',()=>{inp.value=a.dataset.n;f.requestSubmit();}));
 const n=new URLSearchParams(location.search).get('n'); if(n){inp.value=n;show(n.toUpperCase());}
