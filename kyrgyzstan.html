@@ -28,7 +28,7 @@
   <nav class="links">
     <div class="dd"><button type="button" class="dd-b">Доставка<i></i></button>
       <div class="dd-p">
-        <a class="dl" href="rossiya.html"><b><img class="flag" src="assets/flag-ru.svg" alt="" width="20" height="15">Россия</b><span>Авиа от 7 дней, контейнер от $6 за кг</span></a>
+        <a class="dl" href="rossiya.html"><b><img class="flag" src="assets/flag-ru.svg" alt="" width="20" height="15">Россия</b><span>Авиа от 6 дней, контейнер от $6 за кг</span></a>
         <a class="dl" href="kazakhstan.html"><b><img class="flag" src="assets/flag-kz.svg" alt="" width="20" height="15">Казахстан</b><span>Авиа за 3 дня, контейнер от $3 за кг</span></a>
         <a class="dl" href="kyrgyzstan.html"><b><img class="flag" src="assets/flag-kg.svg" alt="" width="20" height="15">Кыргызстан</b><span>Авиа $11 за кг, контейнер от $3 за кг</span></a>
         <a class="dl" href="belarus.html"><b><img class="flag" src="assets/flag-by.svg" alt="" width="20" height="15">Беларусь</b><span>Экспресс и контейнер до вашего города</span></a>
@@ -88,11 +88,12 @@
         <div class="fld full cfCountry"><span>Страна получения</span><div class="tabs cCountries" role="group" aria-label="Страна получения"></div></div>
         <div class="fg">
           <label class="fld cfCity"><span>Город</span><select class="cCity"></select></label>
-          <label class="fld"><span>Вес посылки, кг</span><input class="cW" type="number" inputmode="decimal" min="0.1" max="100" step="0.1" value="5"></label>
+          <label class="fld"><span>Вес посылки, кг</span><input class="cW" type="number" inputmode="decimal" min="1" max="100" step="0.1" value="5"></label>
           <div class="fld full"><span>Размер коробки</span><div class="tabs cBoxes" role="group" aria-label="Размер коробки"></div>
             <div class="cDims" hidden><input class="dL" type="number" min="1" placeholder="Длина, см" aria-label="Длина, см"><input class="dW" type="number" min="1" placeholder="Ширина, см" aria-label="Ширина, см"><input class="dH" type="number" min="1" placeholder="Высота, см" aria-label="Высота, см"></div>
             <p class="cHint" aria-live="polite"></p></div>
           <label class="fld full cfCat"><span>Что в посылке (для «Доступного»)</span><select class="cCat"></select></label>
+          <label class="fld full cfParts" hidden><span>Какие автозапчасти</span><select class="cParts"></select></label>
           <label class="fld cfUz" hidden><span>Тип груза</span><select class="cUz"></select></label>
           <label class="fld cfKg" hidden><span>Тип груза</span><select class="cKg"></select></label>
           <div class="fld full"><span>Оплачу в</span><div class="tabs cPay" role="group" aria-label="Валюта оплаты"></div></div>
@@ -103,6 +104,8 @@
         <div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
         <p class="ttl rTtl"></p>
         <p class="sum rSum"></p>
+        <p class="rKrw mono"></p>
+        <p class="vtip rTip" hidden></p>
         <div class="meta rMeta"></div>
         <div class="vcta rCta"></div>
         <hr>
@@ -132,7 +135,7 @@
       <div class="fcard">
         <form class="lead" novalidate>
           <div class="fg">
-          <label class="fld"><span>Имя *</span><input name="name" placeholder="Анна"></label>
+          <label class="fld"><span>Имя *</span><input name="name" placeholder="Как вас зовут"></label>
           <label class="fld"><span>Телефон или Telegram *</span><input name="contact" placeholder="+7… или @nick"></label>
           <label class="fld"><span>Страна получения *</span><select name="country"><option>Россия</option><option>Казахстан</option><option selected>Кыргызстан</option><option>Беларусь</option><option>Узбекистан</option></select></label>
           <label class="fld"><span>Город</span><input name="city" placeholder="Город получения"></label>
