@@ -137,11 +137,11 @@
         });
     });
     function card(k) {
-        const cls = k.s === "img" ? "t-img" : k.s === "grey" ? "t-grey" : "t-navy";
+        const cls = k.s === "img" ? "t-img" : "t-navy";
         const im = k.img ? '<img class="bgi" loading="lazy" alt="" ' + (k.img === "plane" ? 'style="transform:translateX(12%) scale(1.35)" ' : "") + 'src="' + V.IMG[k.img] + '"><div class="ov"></div>' : "";
         const bt = k.pick ? '<a class="btn o" href="#calc" data-pick="' + k.pick + '">Посчитать ' + k.bn + "</a>" : '<a class="btn o" href="#contact">Узнать цену</a>';
         const nm = k.lab.split(" · "), tag = nm[1] ? nm[1].charAt(0).toUpperCase() + nm[1].slice(1) + ". " : "";
-        return '<article class="tc ' + cls + '">' + im + "<div><h3>" + nm[0] + '</h3><p class="tl">' + tag + k.h + '.</p></div><div><div class="spec">' + k.spec.map(x => '<div><div class="mono">' + x[0] + "</div><b>" + x[1] + "</b></div>").join("") + "</div>" + bt + "</div></article>";
+        return '<article class="tc ' + cls + (k.rec ? " rec" : "") + '">' + im + "<div>" + (k.rec ? '<span class="tbadge">Рекомендуем</span>' : "") + "<h3>" + nm[0] + '</h3><p class="tl">' + tag + k.h + ".</p>" + (k.ref ? '<p class="tref">' + k.ref + "</p>" : "") + '</div><div><div class="spec">' + k.spec.map(x => '<div><div class="mono">' + x[0] + "</div><b>" + x[1] + "</b></div>").join("") + "</div>" + bt + "</div></article>";
     }
     function cards(el, code) {
         const list = V.CARDS[code];
@@ -159,7 +159,8 @@
         aviav: "air",
         exp: "express",
         mp: "maxpost",
-        eco: "container"
+        eco: "container",
+        ferry: "ferry"
     };
     const CC = {
         ru: "RU",
@@ -178,6 +179,13 @@
     function initCalc(root, opt) {
         opt = opt || {};
         const P = window.VezetPlan, T = P.T, q = s => root.querySelector(s);
+        const PAYS = {
+            RU: [ "RUB", "KRW" ]
+        }, PAYN = {
+            KRW: "₩ вонах",
+            RUB: "₽ рублях",
+            KZT: "₸ тенге"
+        }, payList = c => PAYS[c] || [ "KRW", "RUB", "KZT" ];
         const st = {
             country: CC[opt.country || "ru"] || "RU",
             box: "M",
@@ -185,6 +193,7 @@
             sel: null,
             cityId: null
         };
+        st.pay = payList(st.country)[0];
         const el = {
             countries: q(".cCountries"),
             city: q(".cCity"),
@@ -193,18 +202,33 @@
             dims: q(".cDims"),
             hint: q(".cHint"),
             cat: q(".cCat"),
+            parts: q(".cParts"),
             uz: q(".cUz"),
             kg: q(".cKg"),
             pay: q(".cPay"),
             ttl: q(".rTtl"),
             sum: q(".rSum"),
+            krw: q(".rKrw"),
+            tip: q(".rTip"),
             meta: q(".rMeta"),
             cta: q(".rCta"),
             allT: q(".rAllT"),
             list: q(".rList")
         };
         if (opt.lock) q(".cfCountry").hidden = true;
-        el.cat.innerHTML = T.containerCategories.map(c => '<option value="' + c.id + '">' + esc(c.name) + (c.actualWeightOnly ? " (по фактическому весу)" : "") + "</option>").join("");
+        const catOpt = c => '<option value="' + c.id + '">' + esc(c.name) + (c.actualWeightOnly ? " (по фактическому весу)" : "") + "</option>";
+        function catList() {
+            const v = el.cat.value, ru = st.country === "RU";
+            el.cat.innerHTML = ru ? T.containerCategories.filter(c => c.id.indexOf("parts_") !== 0).map(catOpt).join("") + '<option value="parts">Автозапчасти</option>' : T.containerCategories.map(catOpt).join("");
+            if ([ ...el.cat.options ].some(o => o.value === v)) el.cat.value = v; else if (v === "parts_heavy" || v === "parts_bulky") {
+                if (ru) {
+                    el.cat.value = "parts";
+                    el.parts.value = v === "parts_bulky" ? "bulky" : "heavy";
+                }
+            } else if (v === "parts" && !ru) el.cat.value = "parts_heavy";
+            q(".cfCat span").textContent = ru ? "Что в посылке" : "Что в посылке (для «Доступного»)";
+        }
+        el.parts.innerHTML = P.FERRY.types.map(t => '<option value="' + t.id + '">' + t.name + " — $" + t.usd + " за кг" + (t.confirm ? ", уточнит менеджер" : "") + "</option>").join("");
         el.uz.innerHTML = '<option value="standard">Стандартный груз</option>' + T.countries.UZ.airUZ.commercial.map(c => '<option value="c:' + c.id + '">Коммерческий: ' + esc(c.name.toLowerCase()) + "</option>").join("");
         el.kg.innerHTML = [ "standard", "commercial", "dyson", "documents" ].map(k => '<option value="' + k + '">' + esc(T.countries.KG.airKG[k].name) + "</option>").join("");
         const tab = (lab, on, data) => '<button type="button" class="tab' + (on ? " on" : "") + '" aria-pressed="' + on + '" ' + data + ">" + lab + "</button>";
@@ -213,7 +237,7 @@
             el.countries.innerHTML = [ "RU", "KZ", "BY", "KG", "UZ" ].map(c => tab(FLAG(LC[c]) + T.countries[c].name, st.country === c, 'data-c="' + c + '"')).join("");
             el.boxes.innerHTML = T.boxes.map(b => tab(b.id + " · до " + kg(b.maxKg), st.box === b.id, 'data-b="' + b.id + '"')).join("") + tab("Свои размеры", st.box === "custom", 'data-b="custom"');
             el.dims.hidden = st.box !== "custom";
-            el.pay.innerHTML = [ [ "KRW", "₩ вонах" ], [ "RUB", "₽ рублях" ], [ "KZT", "₸ тенге" ] ].map(p => tab(p[1], st.pay === p[0], 'data-p="' + p[0] + '"')).join("");
+            el.pay.innerHTML = payList(st.country).map(p => tab(PAYN[p], st.pay === p, 'data-p="' + p + '"')).join("");
         }
         function fields() {
             const c = st.country, list = P.CITIES[c];
@@ -222,8 +246,9 @@
                 if (!list.some(x => x.id === st.cityId)) st.cityId = list[0].id;
                 el.city.innerHTML = list.map(x => '<option value="' + x.id + '"' + (x.id === st.cityId ? " selected" : "") + ">" + esc(x.name) + "</option>").join("");
             } else st.cityId = null;
-            const msk = c === "RU" && list && (list.find(x => x.id === st.cityId) || {}).moscow;
-            q(".cfCat").hidden = !(c === "RU" || c === "KZ" || c === "BY") || !!msk;
+            catList();
+            q(".cfCat").hidden = !(c === "RU" || c === "KZ" || c === "BY");
+            q(".cfParts").hidden = !(c === "RU" && el.cat.value === "parts");
             q(".cfUz").hidden = c !== "UZ";
             q(".cfKg").hidden = c !== "KG";
         }
@@ -252,6 +277,7 @@
                 dims: dims(),
                 box: st.box,
                 category: el.cat.value,
+                partsType: el.parts.value,
                 uzCargo: uzv === "standard" ? "standard" : "commercial",
                 uzCategory: uzv.indexOf("c:") === 0 ? uzv.slice(2) : null,
                 kgCargo: el.kg.value,
@@ -261,30 +287,43 @@
         function empty(msg) {
             el.ttl.textContent = "";
             el.sum.classList.remove("odo");
+            el.sum.removeAttribute("aria-label");
             el.sum.textContent = msg;
+            el.krw.textContent = "";
+            el.tip.hidden = true;
             el.meta.innerHTML = "";
             el.cta.innerHTML = "";
             el.allT.textContent = "";
             el.list.innerHTML = "";
         }
+        const MINW = "Минимальный оплачиваемый вес — 1 кг (у MAXPOST — 0,5 кг)";
+        const BULB = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        const about = (n, cur) => P.fmt(cur === "KRW" ? Math.max(1e3, Math.round(n / 1e3) * 1e3) : Math.max(100, Math.round(n / 100) * 100), cur);
         function row(x, pk) {
             const pa = x.approx ? x.packAmount : pk && pk.status === "ok" ? pk.amount : null, ap = x.approx ? "≈ " : "";
             const right = x.status === "ok" ? '<span class="vt-p">' + ap + "от " + P.fmt(x.amount, x.currency) + (pa != null ? "<small>с упаковкой " + ap + "от " + P.fmt(x.amount + pa, x.currency) + "</small>" : "") + "</span>" : '<span class="vt-p mgr">' + esc(x.label || "Рассчитает менеджер") + "</span>";
             const sub = [ x.term, x.dispatchText && !x.badge2 ? "ближайшая отправка " + x.dispatchText : "" ].filter(Boolean).join(" · ");
             return '<button type="button" class="vt' + (x.id === st.sel ? " on" : "") + (x.status !== "ok" ? " na" : "") + '" data-id="' + x.id + '"><span class="vt-h"><b>' + esc(x.name) + "</b>" + (x.badge ? '<em class="vb">' + esc(x.badge) + "</em>" : "") + (x.badge2 ? '<em class="vb b2">' + esc(x.badge2) + "</em>" : "") + "</span>" + right + (sub ? '<span class="vt-s">' + esc(sub) + "</span>" : "") + "</button>";
         }
+        let lastSig = "";
         function calc(animate) {
             const o = opts(), b = T.boxes.find(x => x.id === st.box);
+            const sig = JSON.stringify(o) + "|" + st.sel;
+            if (animate === "change" && sig === lastSig) return;
+            lastSig = sig;
             el.hint.textContent = "";
             el.hint.classList.remove("warn");
+            el.w.min = st.sel === "maxpost" ? "0.5" : "1";
             if (!(o.weightKg > 0)) {
-                empty("Укажите вес посылки");
+                empty(el.w.value === "" ? "Укажите вес посылки" : "Вес должен быть больше 0 кг");
+                el.hint.textContent = "Вес в килограммах, например 2,5";
+                el.hint.classList.add("warn");
                 return;
             }
             if (b && o.weightKg > b.maxKg) {
                 el.hint.textContent = "Для такого веса выберите размер больше";
                 el.hint.classList.add("warn");
-            }
+            } else if (st.box === "XS" || o.weightKg < 1) el.hint.textContent = MINW;
             if (!o.dims) {
                 empty("Укажите длину, ширину и высоту коробки");
                 return;
@@ -294,6 +333,7 @@
                 empty("Рассчитает менеджер");
                 return;
             }
+            el.w.min = st.sel === "maxpost" ? "0.5" : "1";
             if (!cards.some(x => x.id === st.sel)) st.sel = cards[0].id;
             const c = cards.find(x => x.id === st.sel), ap = c.approx ? "≈ " : "";
             el.ttl.innerHTML = esc(c.name) + " в " + r.countryTo + (r.city && r.city.id !== "other" ? ", " + esc(r.city.name) : "") + (c.badge ? ' <span class="vb">' + esc(c.badge) + "</span>" : "") + (c.badge2 ? ' <span class="vb b2">' + esc(c.badge2) + "</span>" : "");
@@ -302,21 +342,35 @@
                 const pa = c.approx ? c.packAmount : pk && pk.status === "ok" ? pk.amount : null, s = ap + "от " + P.fmt(c.amount + (pa || 0), c.currency);
                 if (animate) roll(el.sum, s); else {
                     el.sum.classList.remove("odo");
+                    el.sum.removeAttribute("aria-label");
                     el.sum.textContent = s;
                 }
+                const pk2 = c.approx ? c.packKrw : pk && pk.status === "ok" ? pk.amountKrw : 0;
+                el.krw.textContent = c.currency !== "KRW" && c.amountKrw ? "= " + ap + P.fmt(c.amountKrw + (pk2 || 0), "KRW") + " по курсу Банка Кореи +5%" : "";
+                const tp = c.boxTip;
+                el.tip.hidden = !tp;
+                el.tip.innerHTML = tp ? BULB + '<span>Коробка больше, чем нужно. Если упаковать в <button type="button" class="lnk" data-b="' + tp.box + '">' + tp.box + " (" + tp.dims + ")</button>, будет дешевле примерно на " + about(tp.save, tp.currency) + "</span>" : "";
                 m.push("Доставка: <b>" + ap + "от " + P.fmt(c.amount, c.currency) + "</b>" + (c.approx ? " за " + c.parts + " " + (c.parts < 5 ? "посылки" : "посылок") + " по ~" + kg(c.partKg) : ""));
                 m.push(pa != null ? "Упаковка" + (!c.approx && pk.name ? " «" + esc(pk.name) + "»" : "") + ": <b>" + P.fmt(pa, c.currency) + "</b>" : "Упаковка: <b>рассчитает менеджер</b>");
-                if (c.billedKg) m.push((c.approx ? "Каждую часть считаем по " : "Считаем по ") + kg(c.billedKg) + ": больший из фактического и объёмного веса");
-                if (c.term) m.push("Срок: <b>" + esc(c.term) + "</b>");
+                if (c.billedKg) m.push(c.minBilled ? "Считаем по " + kg(c.minBilled) + ": минимальный оплачиваемый вес" : (c.approx ? "Каждую часть считаем по " : "Считаем по ") + kg(c.billedKg) + (c.actualOnly ? ": фактический вес" : ": больший из фактического и объёмного веса"));
+                if (c.estimate) m.push("Срок: <b>" + esc(c.estimate) + "</b>. Срок по тарифу — " + esc(c.tariffDays)); else if (c.term) m.push("Срок: <b>" + esc(c.term) + "</b>");
                 if (c.schedule) m.push("Отправки: " + c.schedule + (c.dispatchText ? " · ближайшая — <b>" + c.dispatchText + "</b>" : ""));
                 if (c.receive) m.push(esc(c.receive.charAt(0).toUpperCase() + c.receive.slice(1)));
-                if (c.category) m.push("Категория: " + esc(c.category));
+                if (c.id === "maxpost") m.push("Получение: ваше почтовое отделение");
+                if (c.category) m.push((c.id === "ferry" ? "Тип: " : "Категория: ") + esc(c.category));
+                (c.lines || []).forEach(x => m.push(esc(x)));
                 if (c.note) m.push(esc(c.note));
-                if (c.id === "express") m.push("Телефоны, колонки и шуруповёрты — по согласованию с менеджером");
+                if (c.id === "express") {
+                    m.push("Доставка до двери или ближайшего ПВЗ — на выбор");
+                    m.push("Телефоны, колонки и шуруповёрты — по согласованию с менеджером");
+                }
                 el.cta.innerHTML = '<a class="btn o" href="' + P.startLink(o, c.id) + '" target="_blank" rel="noopener">Оформить в Telegram</a><a class="btn w" href="' + P.BOT + '" target="_blank" rel="noopener">Спросить менеджера</a>';
             } else {
                 el.sum.classList.remove("odo");
+                el.sum.removeAttribute("aria-label");
                 el.sum.textContent = c.label || "Рассчитает менеджер";
+                el.krw.textContent = "";
+                el.tip.hidden = true;
                 if (c.days) m.push("Срок: <b>" + esc(c.days) + "</b>");
                 if (c.note) m.push(esc(c.note));
                 m.push("Менеджеры на связи ежедневно 09:00–21:00, ответ в течение 15 минут");
@@ -325,17 +379,24 @@
             el.meta.innerHTML = m.map(x => "<span>" + x + "</span>").join("");
             const ex = r.extras || [], many = cards.length > 1 || ex.length;
             el.allT.textContent = many ? "Все тарифы для " + kg(o.weightKg) + ":" : "";
-            el.list.innerHTML = many ? cards.map(x => row(x, pk)).join("") + ex.map(x => '<div class="vt info"><span class="vt-h"><b>' + esc(x.name) + '</b></span><span class="vt-p mgr">' + esc(x.label) + "</span></div>").join("") : "";
+            el.list.innerHTML = many ? cards.map(x => row(x, pk)).join("") + ex.map(x => x.pick ? '<button type="button" class="vt info" data-cat="' + x.pick + '"><span class="vt-h"><b>' + esc(x.name) + '</b></span><span class="vt-p mgr">' + esc(x.label) + '</span><span class="vt-s">Выберите «Автозапчасти» — посчитаем по типу</span></button>' : '<div class="vt info"><span class="vt-h"><b>' + esc(x.name) + '</b></span><span class="vt-p mgr">' + esc(x.label) + "</span></div>").join("") : "";
         }
         function set(code) {
             const C = CC[code] || code;
             if (!T.countries[C]) return;
             st.country = C;
             st.sel = null;
+            if (!st.payUser || payList(C).indexOf(st.pay) < 0) st.pay = payList(C)[0];
             chips();
             fields();
             calc(true);
             if (opt.onCountry) opt.onCountry(LC[C]);
+        }
+        function parts() {
+            if (st.country !== "RU") return;
+            el.cat.value = "parts";
+            fields();
+            st.sel = "ferry";
         }
         el.countries.addEventListener("click", e => {
             const b = e.target.closest("[data-c]");
@@ -352,6 +413,7 @@
             const b = e.target.closest("[data-p]");
             if (!b) return;
             st.pay = b.dataset.p;
+            st.payUser = true;
             chips();
             calc(true);
         });
@@ -361,10 +423,35 @@
             calc(true);
         });
         el.w.addEventListener("input", () => calc(false));
-        el.w.addEventListener("change", () => calc(true));
-        [ el.cat, el.uz, el.kg ].forEach(s => s.addEventListener("change", () => calc(true)));
-        root.querySelectorAll(".cDims input").forEach(i => i.addEventListener("input", () => calc(false)));
+        el.w.addEventListener("change", () => calc("change"));
+        el.cat.addEventListener("change", () => {
+            fields();
+            if (el.cat.value === "parts") st.sel = "ferry"; else if (st.sel === "ferry") st.sel = null;
+            calc(true);
+        });
+        el.parts.addEventListener("change", () => {
+            st.sel = "ferry";
+            calc(true);
+        });
+        [ el.uz, el.kg ].forEach(s => s.addEventListener("change", () => calc(true)));
+        el.tip.addEventListener("click", e => {
+            const b = e.target.closest("[data-b]");
+            if (!b) return;
+            st.box = b.dataset.b;
+            chips();
+            calc(true);
+        });
+        root.querySelectorAll(".cDims input").forEach(i => {
+            i.addEventListener("input", () => calc(false));
+            i.addEventListener("change", () => calc("change"));
+        });
         el.list.addEventListener("click", e => {
+            const pc = e.target.closest("[data-cat]");
+            if (pc) {
+                parts();
+                calc(true);
+                return;
+            }
             const b = e.target.closest(".vt[data-id]");
             if (!b) return;
             st.sel = b.dataset.id;
@@ -375,6 +462,10 @@
             if (!a) return;
             e.preventDefault();
             if (a.dataset.c && CC[a.dataset.c] !== st.country) set(a.dataset.c);
+            if (a.dataset.pick === "ferry") parts(); else if (st.sel === "ferry" && el.cat.value === "parts") {
+                el.cat.value = "mix";
+                fields();
+            }
             st.sel = PICK[a.dataset.pick] || a.dataset.pick;
             calc(true);
             root.scrollIntoView({
