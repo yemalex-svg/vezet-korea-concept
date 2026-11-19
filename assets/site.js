@@ -136,12 +136,23 @@
             });
         });
     });
+    let REFCUR = "RUB";
+    function refText(id) {
+        const r = V.REF && V.REF[id];
+        return r ? "Из последних расчётов: " + (r[REFCUR] || r.RUB).split(" · ").map(x => x.replace(/ /g, " ")).join(" · ") : "";
+    }
+    function setRefCur(cur) {
+        REFCUR = cur === "KRW" ? "KRW" : "RUB";
+        document.querySelectorAll(".tref[data-ref]").forEach(p => {
+            p.textContent = refText(p.dataset.ref);
+        });
+    }
     function card(k) {
         const cls = k.s === "img" ? "t-img" : "t-navy";
         const im = k.img ? '<img class="bgi" loading="lazy" alt="" ' + (k.img === "plane" ? 'style="transform:translateX(12%) scale(1.35)" ' : "") + 'src="' + V.IMG[k.img] + '"><div class="ov"></div>' : "";
         const bt = k.pick ? '<a class="btn o" href="#calc" data-pick="' + k.pick + '">Посчитать ' + k.bn + "</a>" : '<a class="btn o" href="#contact">Узнать цену</a>';
         const nm = k.lab.split(" · "), tag = nm[1] ? nm[1].charAt(0).toUpperCase() + nm[1].slice(1) + ". " : "";
-        return '<article class="tc ' + cls + (k.rec ? " rec" : "") + '">' + im + "<div>" + (k.rec ? '<span class="tbadge">Рекомендуем</span>' : "") + "<h3>" + nm[0] + '</h3><p class="tl">' + tag + k.h + ".</p>" + (k.ref ? '<p class="tref">' + k.ref + "</p>" : "") + '</div><div><div class="spec">' + k.spec.map(x => '<div><div class="mono">' + x[0] + "</div><b>" + x[1] + "</b></div>").join("") + "</div>" + bt + "</div></article>";
+        return '<article class="tc ' + cls + (k.rec ? " rec" : "") + '">' + im + "<div>" + (k.rec ? '<span class="tbadge">Рекомендуем</span>' : "") + "<h3>" + nm[0] + '</h3><p class="tl">' + tag + k.h + ".</p>" + (k.ref ? '<p class="tref" data-ref="' + k.ref + '">' + refText(k.ref) + "</p>" : "") + '</div><div><div class="spec">' + k.spec.map(x => '<div><div class="mono">' + x[0] + "</div><b>" + x[1] + "</b></div>").join("") + "</div>" + bt + "</div></article>";
     }
     function cards(el, code) {
         const list = V.CARDS[code];
@@ -238,6 +249,7 @@
             el.boxes.innerHTML = T.boxes.map(b => tab(b.id + " · до " + kg(b.maxKg), st.box === b.id, 'data-b="' + b.id + '"')).join("") + tab("Свои размеры", st.box === "custom", 'data-b="custom"');
             el.dims.hidden = st.box !== "custom";
             el.pay.innerHTML = payList(st.country).map(p => tab(PAYN[p], st.pay === p, 'data-p="' + p + '"')).join("");
+            setRefCur(st.pay);
         }
         function fields() {
             const c = st.country, list = P.CITIES[c];
@@ -302,7 +314,7 @@
         function row(x, pk) {
             const pa = x.approx ? x.packAmount : pk && pk.status === "ok" ? pk.amount : null, ap = x.approx ? "≈ " : "";
             const right = x.status === "ok" ? '<span class="vt-p">' + ap + "от " + P.fmt(x.amount, x.currency) + (pa != null ? "<small>с упаковкой " + ap + "от " + P.fmt(x.amount + pa, x.currency) + "</small>" : "") + "</span>" : '<span class="vt-p mgr">' + esc(x.label || "Рассчитает менеджер") + "</span>";
-            const sub = [ x.term, x.dispatchText && !x.badge2 ? "ближайшая отправка " + x.dispatchText : "" ].filter(Boolean).join(" · ");
+            const sub = [ x.term && x.estimate ? "≈" + x.term : x.term, x.dispatchText && !x.badge2 ? "ближайшая отправка " + x.dispatchText : "" ].filter(Boolean).join(" · ");
             return '<button type="button" class="vt' + (x.id === st.sel ? " on" : "") + (x.status !== "ok" ? " na" : "") + '" data-id="' + x.id + '"><span class="vt-h"><b>' + esc(x.name) + "</b>" + (x.badge ? '<em class="vb">' + esc(x.badge) + "</em>" : "") + (x.badge2 ? '<em class="vb b2">' + esc(x.badge2) + "</em>" : "") + "</span>" + right + (sub ? '<span class="vt-s">' + esc(sub) + "</span>" : "") + "</button>";
         }
         let lastSig = "";
@@ -353,15 +365,17 @@
                 m.push("Доставка: <b>" + ap + "от " + P.fmt(c.amount, c.currency) + "</b>" + (c.approx ? " за " + c.parts + " " + (c.parts < 5 ? "посылки" : "посылок") + " по ~" + kg(c.partKg) : ""));
                 m.push(pa != null ? "Упаковка" + (!c.approx && pk.name ? " «" + esc(pk.name) + "»" : "") + ": <b>" + P.fmt(pa, c.currency) + "</b>" : "Упаковка: <b>рассчитает менеджер</b>");
                 if (c.billedKg) m.push(c.minBilled ? "Считаем по " + kg(c.minBilled) + ": минимальный оплачиваемый вес" : (c.approx ? "Каждую часть считаем по " : "Считаем по ") + kg(c.billedKg) + (c.actualOnly ? ": фактический вес" : ": больший из фактического и объёмного веса"));
+                const refS = c.id === "air" && st.country === "RU" && V.REF && V.REF.air_ru && V.REF.air_ru.short;
                 if (c.estimate) m.push("Срок: <b>" + esc(c.estimate) + "</b>. Срок по тарифу — " + esc(c.tariffDays)); else if (c.term) m.push("Срок: <b>" + esc(c.term) + "</b>");
                 if (c.schedule) m.push("Отправки: " + c.schedule + (c.dispatchText ? " · ближайшая — <b>" + c.dispatchText + "</b>" : ""));
                 if (c.receive) m.push(esc(c.receive.charAt(0).toUpperCase() + c.receive.slice(1)));
                 if (c.id === "maxpost") m.push("Получение: ваше почтовое отделение");
                 if (c.category) m.push((c.id === "ferry" ? "Тип: " : "Категория: ") + esc(c.category));
                 (c.lines || []).forEach(x => m.push(esc(x)));
+                if (refS) m.push("Справочно: " + refS[st.pay === "KRW" ? "KRW" : "RUB"] + " до ПВЗ");
                 if (c.note) m.push(esc(c.note));
                 if (c.id === "express") {
-                    m.push("Доставка до двери или ближайшего ПВЗ — на выбор");
+                    m.push("Доставка до ближайшего ПВЗ или до двери — на выбор");
                     m.push("Телефоны, колонки и шуруповёрты — по согласованию с менеджером");
                 }
                 el.cta.innerHTML = '<a class="btn o" href="' + P.startLink(o, c.id) + '" target="_blank" rel="noopener">Оформить в Telegram</a><a class="btn w" href="' + P.BOT + '" target="_blank" rel="noopener">Спросить менеджера</a>';

@@ -15,7 +15,7 @@
             moscow: true,
             kzt: 7093,
             days: [ 11, 12 ],
-            door: [ 1028, 514.5 ]
+            door: [ 899, 550.25 ]
         }, {
             id: "nsk",
             name: "Новосибирск",
@@ -264,7 +264,7 @@
                     m.status = "ok";
                     m.billedKg = b;
                     m.days = daysTxt(AIR_RU.days[0], AIR_RU.days[1]);
-                    m.lines = [ "Доставка до двери получателя; по желанию — до ближайшего ПВЗ (дешевле, тот же срок)" ];
+                    m.lines = [ "Доставка до ближайшего ПВЗ или до двери — на выбор" ];
                     r.cards[i] = m;
                 } else {
                     r.cards[i] = {
