@@ -7,6 +7,32 @@
         krwPerRub: 16.46,
         krwPerKzt: 2.96
     };
+    var RATES_URL = "https://vezetkorea.com/api/rates.json";
+    var LIVE = null;
+    function loadRates() {
+        if (!window.fetch) return;
+        var ctl = window.AbortController ? new AbortController : null;
+        var timer = setTimeout(function() {
+            if (ctl) ctl.abort();
+        }, 6e3);
+        fetch(RATES_URL, {
+            cache: "no-cache",
+            signal: ctl ? ctl.signal : undefined
+        }).then(function(r) {
+            return r.ok ? r.json() : null;
+        }).then(function(d) {
+            clearTimeout(timer);
+            if (!d || !(d.krwPerUsd > 500 && d.krwPerUsd < 5e3) || !(d.krwPerRub > 2 && d.krwPerRub < 100) || !(d.krwPerKzt > .5 && d.krwPerKzt < 20) || !d.updatedAt) return;
+            LIVE = d;
+            try {
+                document.dispatchEvent(new CustomEvent("vezet:rates", {
+                    detail: d
+                }));
+            } catch (e) {}
+        }).catch(function() {
+            clearTimeout(timer);
+        });
+    }
     var CITIES = {
         RU: [ {
             id: "msk",
@@ -221,11 +247,12 @@
         if (list) city = list.filter(function(c) {
             return c.id === o.cityId;
         })[0] || list[0];
+        var src = LIVE || RATES_DEMO;
         var rates = {
-            krwPerUsd: RATES_DEMO.krwPerUsd,
-            krwPerRub: RATES_DEMO.krwPerRub,
-            krwPerKzt: RATES_DEMO.krwPerKzt,
-            updatedAt: Date.now()
+            krwPerUsd: src.krwPerUsd,
+            krwPerRub: src.krwPerRub,
+            krwPerKzt: src.krwPerKzt,
+            updatedAt: LIVE ? LIVE.updatedAt : Date.now()
         };
         var delivery = city && city.kzt != null ? {
             kzt: city.kzt,
@@ -472,6 +499,10 @@
         CITIES: CITIES,
         BOT: BOT,
         T: T,
-        FERRY: FERRY
+        FERRY: FERRY,
+        rates: function() {
+            return LIVE;
+        }
     };
+    loadRates();
 })();

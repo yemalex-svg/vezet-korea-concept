@@ -438,6 +438,7 @@
         });
         el.w.addEventListener("input", () => calc(false));
         el.w.addEventListener("change", () => calc("change"));
+        document.addEventListener("vezet:rates", () => calc(false));
         el.cat.addEventListener("change", () => {
             fields();
             if (el.cat.value === "parts") st.sel = "ferry"; else if (st.sel === "ferry") st.sel = null;

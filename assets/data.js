@@ -1,5 +1,5 @@
 (function() {
-    const CF = "https://d2ol7oe51mr4n9.cloudfront.net/user_31UcK3wRu9TyCddvt4aW3tgnRH3/";
+    const CF = "https://vezetkorea.com/media/";
     const IMG = {
         plane: CF + "416c0180-1109-4881-b5e3-bdc41c652c56.jpg",
         ship: CF + "a5e13252-68f4-4ba4-b787-af49f25f6166.jpg",
