@@ -116,6 +116,99 @@
         days: "~14 дней + 2–4 дня по России"
     };
     var EXPRESS_RU_DAYS = [ 15, 25 ];
+    var KG_CONT = {
+        minKg: 5,
+        cats: [ {
+            id: "cosmetics",
+            name: "Косметика",
+            usd: 3
+        }, {
+            id: "socks",
+            name: "Носки и бельё",
+            usd: 3
+        }, {
+            id: "vitamins",
+            name: "Витамины и БАДы",
+            usd: 4
+        }, {
+            id: "parts_heavy",
+            name: "Автозапчасти тяжёлые",
+            usd: 4.5
+        }, {
+            id: "clothes",
+            name: "Одежда",
+            usd: 5
+        }, {
+            id: "shoes",
+            name: "Обувь",
+            usd: 5
+        }, {
+            id: "bags",
+            name: "Сумки и аксессуары",
+            usd: 5
+        }, {
+            id: "textile",
+            name: "Текстиль для дома",
+            usd: 5
+        }, {
+            id: "dishes",
+            name: "Посуда",
+            usd: 5
+        }, {
+            id: "household",
+            name: "Хозтовары",
+            usd: 5
+        }, {
+            id: "chem",
+            name: "Бытовая химия",
+            usd: 5
+        }, {
+            id: "food",
+            name: "Продукты питания",
+            usd: 5
+        }, {
+            id: "kids",
+            name: "Детские товары",
+            usd: 5
+        }, {
+            id: "toys",
+            name: "Игрушки",
+            usd: 5
+        }, {
+            id: "books",
+            name: "Канцтовары и книги",
+            usd: 5
+        }, {
+            id: "sport",
+            name: "Спорттовары",
+            usd: 5
+        }, {
+            id: "mix",
+            name: "Личные посылки (микс)",
+            usd: 5.5
+        }, {
+            id: "appliances",
+            name: "Мелкая бытовая техника",
+            usd: 5.5
+        }, {
+            id: "gadgets",
+            name: "Аксессуары для телефонов",
+            usd: 5.5
+        }, {
+            id: "dyson",
+            name: "Dyson (только от сети)",
+            usd: 5.5
+        }, {
+            id: "kpop",
+            name: "K-POP и сувениры",
+            usd: 5.5
+        }, {
+            id: "parts_bulky",
+            name: "Автозапчасти объёмные",
+            usd: 8.5,
+            actualWeightOnly: true
+        } ]
+    };
     var TIP = {
         ratio: 1.3,
         diffKg: 3,
@@ -128,6 +221,7 @@
         18: "Большой вес",
         35: "Максимальный вес"
     };
+    var CUTOFF_H = 14;
     var SCHED = {
         RU: {
             express: {
@@ -165,15 +259,17 @@
         }
     };
     var DOW = [ "вс", "пн", "вт", "ср", "чт", "пт", "сб" ];
+    var DOW_ON = [ "в воскресенье", "в понедельник", "во вторник", "в среду", "в четверг", "в пятницу", "в субботу" ];
     var MONTHS = [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ];
+    function krNow() {
+        return new Date(Date.now() + 9 * 36e5);
+    }
     function todayKR() {
-        var p = new Intl.DateTimeFormat("en-CA", {
-            timeZone: "Asia/Seoul",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit"
-        }).format(new Date).split("-");
-        return Date.UTC(+p[0], +p[1] - 1, +p[2]);
+        var d = krNow();
+        return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+    }
+    function beforeCutoff() {
+        return krNow().getUTCHours() < CUTOFF_H;
     }
     var DAY = 864e5;
     function dd(t) {
@@ -195,6 +291,7 @@
         }).join(" и ");
     }
     function nextDispatch(s, from) {
+        if (!s.after && beforeCutoff() && s.days.indexOf(new Date(from).getUTCDay()) >= 0) return from;
         for (var i = s.after || 1; i < 15; i++) {
             var t = from + i * DAY;
             if (s.days.indexOf(new Date(t).getUTCDay()) >= 0) return t;
@@ -258,8 +355,8 @@
             kzt: city.kzt,
             days: city.days
         } : null;
-        var ru = o.country === "RU", parts = ru && o.category === "parts", ptype = o.partsType || "heavy";
-        var category = parts ? ptype === "bulky" ? "parts_bulky" : "parts_heavy" : o.category;
+        var ru = o.country === "RU", kgc = o.country === "KG", parts = ru && o.category === "parts", ptype = o.partsType || "heavy";
+        var category = parts ? ptype === "bulky" ? "parts_bulky" : "parts_heavy" : kgc ? null : o.category;
         var input = {
             country: o.country,
             moscow: !!(city && city.moscow),
@@ -344,6 +441,28 @@
                 });
             }
         }
+        if (kgc && !stale) r.cards.forEach(function(c, i) {
+            if (c.id !== "container") return;
+            var kc = KG_CONT.cats.filter(function(x) {
+                return x.id === o.category;
+            })[0] || KG_CONT.cats.filter(function(x) {
+                return x.id === "mix";
+            })[0];
+            var d = input.dims, raw = kc.actualWeightOnly ? input.weightKg : Math.max(input.weightKg, d ? d.l * d.w * d.h / 1e6 * T.containerKgPerM3 : 0);
+            var b = Math.max(KG_CONT.minKg, ceil1(raw));
+            var m = moneyX(kc.usd * b, 0, input.pay, rates);
+            m.id = "container";
+            m.name = "Доступный (контейнер)";
+            m.status = "ok";
+            m.billedKg = b;
+            m.rawKg = raw;
+            m.minKg = KG_CONT.minKg;
+            m.days = T.countries.KG.container.days;
+            m.category = kc.name + ", $" + String(kc.usd).replace(".", ",") + " за кг";
+            if (kc.actualWeightOnly) m.actualOnly = true;
+            m.lines = [ "Погрузка каждую неделю", "Цену по категории подтвердит менеджер при приёме" ];
+            r.cards[i] = m;
+        });
         if (parts && r.cards.some(function(c) {
             return c.id === "container" && c.status === "ok";
         })) r.cards.forEach(function(c) {
@@ -420,8 +539,8 @@
         r.cards.forEach(function(c) {
             if (c.status !== "ok" || c.billedKg == null) return;
             if (c.id === "container" && cat0 && cat0.actualWeightOnly && !input.moscow) c.actualOnly = true;
-            var raw = c.id === "ferry" || c.actualOnly ? w0 : c.id === "container" ? rawCont : rawAir;
-            var min = c.id === "maxpost" ? T.maxpost.stepKg : T.minBilledKg;
+            var raw = c.rawKg != null ? c.rawKg : c.id === "ferry" || c.actualOnly ? w0 : c.id === "container" ? rawCont : rawAir;
+            var min = c.minKg || (c.id === "maxpost" ? T.maxpost.stepKg : T.minBilledKg);
             if (raw < min - 1e-9 && Math.abs(c.billedKg - min) < 1e-9) c.minBilled = min;
         });
         var today = todayKR(), S = SCHED[o.country] || {};
@@ -433,6 +552,7 @@
             if (!t) return;
             c.dispatch = t;
             c.dispatchText = dDay(t);
+            if (!s.after) c.handIn = "Чтобы успеть на эту отправку, сдайте посылку до " + CUTOFF_H + ":00 " + (t === today ? "сегодня" : DOW_ON[new Date(t).getUTCDay()] + ", " + dd(t));
             if (c.id === "express" && delivery && delivery.days) c.receive = "получение ориентировочно " + range(t + (3 + delivery.days[0]) * DAY, t + (6 + delivery.days[1]) * DAY); else if (c.id === "maxpost") c.receive = "получение ориентировочно с " + dd(t + 14 * DAY); else if (s.go) c.receive = "получение ориентировочно " + range(t + s.go[0] * DAY, t + s.go[1] * DAY);
         });
         r.cards.forEach(function(c) {
@@ -486,7 +606,7 @@
     }
     function startLink(o, cardId) {
         var box = o.box === "custom" && o.dims ? "d" + [ o.dims.l, o.dims.w, o.dims.h ].map(Math.round).join("x") : o.box || "M";
-        var extra = o.country === "UZ" ? o.uzCategory || "std" : o.country === "KG" ? o.kgCargo || "standard" : o.category === "parts" ? "parts-" + (o.partsType || "heavy") : o.category || "";
+        var extra = o.country === "UZ" ? o.uzCategory || "std" : o.country === "KG" ? cardId === "container" ? o.category || "mix" : o.kgCargo || "standard" : o.category === "parts" ? "parts-" + (o.partsType || "heavy") : o.category || "";
         var parts = [ "calc", o.country, o.cityId || "", "w" + Math.round(o.weightKg * 10), box, o.pay || "KRW", cardId || "", extra ];
         var p = parts.join("_").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
         return BOT + "?start=" + p;
@@ -500,6 +620,8 @@
         BOT: BOT,
         T: T,
         FERRY: FERRY,
+        KG_CONT: KG_CONT,
+        CUTOFF_H: CUTOFF_H,
         rates: function() {
             return LIVE;
         }

@@ -49,7 +49,7 @@
     const pop = $("#pop");
     function trackHTML(k) {
         const d = V.DEMO[k];
-        return d ? "<b>" + V.STG[d.st] + '</b><div class="bar">' + V.STG.map((s, i) => '<span class="' + (i <= d.st ? "on" : "") + '"></span>').join("") + "</div><small>" + k + " · получение: " + d.city + " · ожидаем " + d.eta + "</small>" : "<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте " + V.DEMO_NO + ".</small>";
+        return d ? "<b>" + V.STG[d.st] + '</b><div class="bar">' + V.STG.map((s, i) => '<span class="' + (i <= d.st ? "on" : "") + '"></span>').join("") + "</div><small>" + k + " · получение: " + d.city + " · ожидаем " + d.eta + "</small>" : "<b>Посылки с таким номером нет</b><small>Номер приходит при регистрации отправки и напечатан на наклейке. Для примера попробуйте " + V.DEMO_NO + ".</small>";
     }
     $("#trackForm").addEventListener("submit", e => {
         e.preventDefault();
@@ -187,6 +187,11 @@
         UZ: "uz"
     };
     const FLAG = c => '<img class="flag" src="assets/flag-' + c + '.svg" alt="" width="20" height="15">';
+    document.querySelectorAll("[data-kgcats]").forEach(el => {
+        const P = window.VezetPlan;
+        if (!P || !P.KG_CONT) return;
+        el.innerHTML = P.KG_CONT.cats.map(c => '<div class="xr"><span>' + esc(c.name) + (c.actualWeightOnly ? "<small>по фактическому весу</small>" : "") + "</span><b>$" + String(c.usd).replace(".", ",") + "</b></div>").join("");
+    });
     function initCalc(root, opt) {
         opt = opt || {};
         const P = window.VezetPlan, T = P.T, q = s => root.querySelector(s);
@@ -229,8 +234,9 @@
         if (opt.lock) q(".cfCountry").hidden = true;
         const catOpt = c => '<option value="' + c.id + '">' + esc(c.name) + (c.actualWeightOnly ? " (по фактическому весу)" : "") + "</option>";
         function catList() {
-            const v = el.cat.value, ru = st.country === "RU";
-            el.cat.innerHTML = ru ? T.containerCategories.filter(c => c.id.indexOf("parts_") !== 0).map(catOpt).join("") + '<option value="parts">Автозапчасти</option>' : T.containerCategories.map(catOpt).join("");
+            const v = el.cat.value, ru = st.country === "RU", kgc = st.country === "KG";
+            el.cat.innerHTML = ru ? T.containerCategories.filter(c => c.id.indexOf("parts_") !== 0).map(catOpt).join("") + '<option value="parts">Автозапчасти</option>' : (kgc ? P.KG_CONT.cats : T.containerCategories).map(catOpt).join("");
+            if (kgc && !v) el.cat.value = "mix";
             if ([ ...el.cat.options ].some(o => o.value === v)) el.cat.value = v; else if (v === "parts_heavy" || v === "parts_bulky") {
                 if (ru) {
                     el.cat.value = "parts";
@@ -259,7 +265,7 @@
                 el.city.innerHTML = list.map(x => '<option value="' + x.id + '"' + (x.id === st.cityId ? " selected" : "") + ">" + esc(x.name) + "</option>").join("");
             } else st.cityId = null;
             catList();
-            q(".cfCat").hidden = !(c === "RU" || c === "KZ" || c === "BY");
+            q(".cfCat").hidden = !(c === "RU" || c === "KZ" || c === "BY" || c === "KG");
             q(".cfParts").hidden = !(c === "RU" && el.cat.value === "parts");
             q(".cfUz").hidden = c !== "UZ";
             q(".cfKg").hidden = c !== "KG";
@@ -368,6 +374,7 @@
                 const refS = c.id === "air" && st.country === "RU" && V.REF && V.REF.air_ru && V.REF.air_ru.short;
                 if (c.estimate) m.push("Срок: <b>" + esc(c.estimate) + "</b>. Срок по тарифу — " + esc(c.tariffDays)); else if (c.term) m.push("Срок: <b>" + esc(c.term) + "</b>");
                 if (c.schedule) m.push("Отправки: " + c.schedule + (c.dispatchText ? " · ближайшая — <b>" + c.dispatchText + "</b>" : ""));
+                if (c.handIn) m.push(esc(c.handIn));
                 if (c.receive) m.push(esc(c.receive.charAt(0).toUpperCase() + c.receive.slice(1)));
                 if (c.id === "maxpost") m.push("Получение: ваше почтовое отделение");
                 if (c.category) m.push((c.id === "ferry" ? "Тип: " : "Категория: ") + esc(c.category));

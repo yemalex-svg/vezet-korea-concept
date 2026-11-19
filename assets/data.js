@@ -128,11 +128,22 @@
         } ]
     };
     const STG = [ "Оформлена", "Принята в пункте приёма", "На складе в Корее: взвешена и упакована", "Ожидает оплаты", "Готова к отправке", "Отправлена из Кореи", "Таможенное оформление", "В пути в ваш город", "Готова к выдаче", "Получена" ];
+    const ETA = (() => {
+        try {
+            return "до " + new Intl.DateTimeFormat("ru-RU", {
+                day: "numeric",
+                month: "long",
+                timeZone: "Asia/Seoul"
+            }).format(new Date(Date.now() + 4 * 864e5));
+        } catch (e) {
+            return "в ближайшие дни";
+        }
+    })();
     const DEMO = {
         "RU-KVA-1365-01-47": {
             st: 7,
             city: "Новосибирск",
-            eta: "до 18 ноября"
+            eta: ETA
         }
     };
     const DEMO_NO = "RU-KVA-1365-01-47";
