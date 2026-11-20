@@ -49,7 +49,7 @@
     const pop = $("#pop");
     function trackHTML(k) {
         const d = V.DEMO[k];
-        return d ? "<b>" + V.STG[d.st] + '</b><div class="bar">' + V.STG.map((s, i) => '<span class="' + (i <= d.st ? "on" : "") + '"></span>').join("") + "</div><small>" + k + " · получение: " + d.city + " · ожидаем " + d.eta + "</small>" : "<b>Посылки с таким номером нет</b><small>Номер приходит при регистрации отправки и напечатан на наклейке. Для примера попробуйте " + V.DEMO_NO + ".</small>";
+        return d ? "<b>" + V.STG[d.st] + '</b><div class="bar">' + V.STG.map((s, i) => '<span class="' + (i <= d.st ? "on" : "") + '"></span>').join("") + "</div><small>" + k + " · получение: " + d.city + " · ожидаем " + d.eta + "</small>" : "<b>Посылки с таким номером нет</b><small>Номер приходит в сообщении менеджера. Для примера попробуйте " + V.DEMO_NO + ".</small>";
     }
     $("#trackForm").addEventListener("submit", e => {
         e.preventDefault();

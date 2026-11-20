@@ -1111,17 +1111,9 @@ section[id]{scroll-margin-top:96px}
 @media (max-width:1100px){.nos{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:980px){.nos{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.nos{grid-template-columns:1fr;gap:8px}.nos li{padding:10px 16px 10px 10px;gap:14px}.nos .ic{width:40px;height:40px}.nos svg{width:22px;height:22px}}
-/* заглушки отзывов и цифр до материалов клиента (19.11) */
+/* отзывы и цифры — только настоящие (ТЗ России, п. 2.5) */
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.sk{display:block;height:14px;border-radius:7px;background:var(--card2)}
-.sk.h{height:24px;width:70%;border-radius:8px;margin-bottom:22px}
-.sk.w90{width:90%}.sk.w75{width:75%}.sk.w70{width:70%}.sk.w60{width:60%}.sk.w50{width:50%}
-.sk + .sk{margin-top:10px}
-.sk.sm{height:11px}
-.sk.av{flex:none;width:44px;height:44px;border-radius:50%}
-.sk.n{height:34px;width:46%;border-radius:10px}
 .big-n.b3{grid-template-columns:repeat(3,1fr)}
-.big-n .sk.n + span{margin-top:14px}
 .rvw{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
 .big-n + .rvw{margin-top:40px}
 .rvc{background:var(--card);border-radius:20px;padding:30px 30px 28px;display:flex;flex-direction:column}
@@ -1131,10 +1123,5 @@ section[id]{scroll-margin-top:96px}
 .rvc-a > div{flex:1}
 .rvc-a b{display:block;font-weight:500}
 .rvc-a span{display:block;color:var(--ink2);font-size:var(--fs-small)}
-@media (max-width:980px){.rvw{grid-template-columns:1fr 1fr}.rvw .sk-c:nth-of-type(3){display:none}}
+@media (max-width:980px){.rvw{grid-template-columns:1fr 1fr}}
 @media (max-width:760px){.rvw,.big-n.b3{grid-template-columns:1fr}}
-/* отслеживание: статусы (19.11) */
-.res .stg{margin-top:22px;border-top:1px solid rgba(255,255,255,.18);padding-top:8px}
-.res .stg li{padding:7px 0}
-.stg-n{margin-top:48px}
-.stg-n li span{font-size:var(--fs-body)}
