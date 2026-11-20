@@ -71,7 +71,7 @@
     <div class="trk">
       <div class="rv">
         <h1>Отследить посылку</h1>
-        <p class="lead">Номер приходит, когда вы регистрируете отправку, и напечатан на наклейке посылки.</p>
+        <p class="lead">Введите номер из сообщения менеджера. Номер приходит, когда посылка уходит со склада.</p>
         <form class="trk-f" id="trkF" autocomplete="off" novalidate><input id="trkIn" placeholder="Например, RU-KVA-1365-01-47" aria-label="Номер посылки"><button class="btn o">Отследить</button></form>
         <p class="trk-q">Для примера: <a data-n="RU-KVA-1365-01-47">RU-KVA-1365-01-47</a></p>
       </div>
@@ -79,21 +79,15 @@
         <div class="res" id="trkR"><div class="notch" aria-hidden="true"><svg viewBox="0 0 30 30"><use href="#nL"/></svg><div class="f"></div><svg viewBox="0 0 30 30"><use href="#nR"/></svg></div>
           <p class="ttl" id="trkT">Статус посылки</p>
           <div class="meta" id="trkM"><span>Введите номер, и здесь появится, где посылка сейчас.</span></div>
-          <ol class="stg" id="trkS" hidden></ol>
         </div>
       </div>
     </div>
   </div>
 </section>
-<section class="sec tight" id="statusy">
-  <div class="wrap">
-<div class="sh2 rv"><div><h2 class="h2 left">Что значат статусы</h2><p class="lead">Статус меняется только вперёд. Если от вас что-то нужно, рядом со статусом появится пометка: «Нужны данные получателя», «Вопрос по содержимому» или «Свяжитесь с менеджером».</p></div></div><ol class="nl n5 stg-n rv"><li><b>Оформлена</b><span>Вы зарегистрировали отправку: по QR-коду, в боте, на терминале или на сайте.</span></li><li><b>Принята в пункте приёма</b><span>Вещи лежат в ячейке, скоро их заберут на склад.</span></li><li><b>На складе в Корее</b><span>Посылку взвесили и упаковали, точный вес известен.</span></li><li><b>Ожидает оплаты</b><span>Менеджер прислал итоговую сумму. После оплаты она не меняется.</span></li><li><b>Готова к отправке</b><span>Оплата получена, посылка ждёт ближайшей отправки по графику.</span></li><li><b>Отправлена из Кореи</b><span>Посылка в пути, появляется ожидаемая дата получения.</span></li><li><b>Таможенное оформление</b><span>Посылка проходит таможню в стране получения.</span></li><li><b>В пути в ваш город</b><span>Посылка едет к вам по стране получения.</span></li><li><b>Готова к выдаче</b><span>Можно забирать: в почтовом отделении, пункте выдачи или у двери — зависит от тарифа.</span></li><li><b>Получена</b><span>Посылка у вас.</span></li></ol>
-  </div>
-</section>
 <section class="sec" id="faq" style="padding-top:20px">
   <div class="wrap faq">
     <div class="rv"><h2>Вопросы об отслеживании</h2><p class="p">О чём чаще всего спрашивают.</p><a class="btn ol faq-all" href="voprosy.html">Все вопросы и ответы</a></div>
-    <div class="rv"><div class="qs"><div class="q"><button>Где найти номер посылки?<i></i></button><div class="a"><div><p>Номер приходит, когда вы регистрируете отправку — по QR-коду, в Telegram-боте, на терминале или на сайте. Он же напечатан на наклейке посылки. Выглядит так: RU-KVA-1365-01-47.</p></div></div></div><div class="q"><button>Номер не находится<i></i></button><div class="a"><div><p>Проверьте номер на наклейке или в сообщении о регистрации. Если посылка всё равно не находится, напишите в <a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Telegram-бот</a>, вам подскажут.</p></div></div></div><div class="q"><button>Что видно по номеру?<i></i></button><div class="a"><div><p>Статус посылки, город получения и ожидаемую дату. Сумма, фото и данные получателя — только у владельца посылки в Telegram-боте.</p></div></div></div><div class="q"><button>Посылка давно в одном статусе<i></i></button><div class="a"><div><p>Напишите менеджеру в <a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Telegram-бот</a>, он проверит посылку и подскажет.</p></div></div></div></div></div>
+    <div class="rv"><div class="qs"><div class="q"><button>Где найти номер посылки?<i></i></button><div class="a"><div><p>Номер приходит в сообщении менеджера, когда посылка уходит со склада в Корее. Он выглядит так: RU-KVA-1365-01-47.</p></div></div></div><div class="q"><button>Номер не находится<i></i></button><div class="a"><div><p>Проверьте номер в сообщении менеджера. Если посылка всё равно не находится, напишите в <a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Telegram-бот</a>, вам подскажут.</p></div></div></div><div class="q"><button>Посылка давно в одном статусе<i></i></button><div class="a"><div><p>Напишите менеджеру в <a href="https://t.me/vezet_korea_bot" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Telegram-бот</a>, он проверит посылку и подскажет.</p></div></div></div></div></div>
   </div>
 </section>
 <section class="sec" id="contact">
@@ -153,11 +147,10 @@
 <script>
 (function(){
 const {$,$$,toast,busy,roll,cards,initCalc,trackHTML}=window.VKUI, V=window.VK;
-const f=$('#trkF'), inp=$('#trkIn'), T=$('#trkT'), M=$('#trkM'), S=$('#trkS');
+const f=$('#trkF'), inp=$('#trkIn'), T=$('#trkT'), M=$('#trkM');
 function show(k){const d=V.DEMO[k];
-  if(!d){T.textContent='Не нашли посылку';M.innerHTML='<span>Проверьте номер на наклейке или в сообщении о регистрации. Для примера: '+V.DEMO_NO+'.</span>';S.hidden=true;return;}
-  T.textContent=V.STG[d.st];M.innerHTML='<span>'+k+'</span><span>Получение: '+d.city+'</span><span>Ожидаем '+d.eta+'</span>';
-  S.innerHTML=V.STG.map((x,i)=>'<li class="'+(i<d.st?'done':i===d.st?'cur':'')+'">'+x+'</li>').join('');S.hidden=false;}
+  if(!d){T.textContent='Не нашли посылку';M.innerHTML='<span>Проверьте номер из сообщения менеджера. Для примера: '+V.DEMO_NO+'.</span>';return;}
+  T.textContent=V.STG[d.st];M.innerHTML='<span>'+k+'</span><span>Получение: '+d.city+'</span><span>Ожидаем '+d.eta+'</span>';}
 f.addEventListener('submit',e=>{e.preventDefault();const k=inp.value.trim().toUpperCase().replace(/\s/g,'');if(!k){toast('Введите номер посылки');return;}busy(f.querySelector('.btn'),550).then(()=>show(k));});
 $$('.trk-q [data-n]').forEach(a=>a.addEventListener('click',()=>{inp.value=a.dataset.n;f.requestSubmit();}));
 const n=new URLSearchParams(location.search).get('n'); if(n){inp.value=n;show(n.toUpperCase());}
